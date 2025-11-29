@@ -10,5 +10,6 @@ public class SistemaEncomiendas {
         ModuloLogin lg = new ModuloLogin();
         lg.setVisible(true);
         //HolaMundo
+        //XD PRUEBA LDKJF   LFDHKJ  REDA
     }
 }
