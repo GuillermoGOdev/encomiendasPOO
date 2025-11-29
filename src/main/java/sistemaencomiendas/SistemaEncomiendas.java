@@ -11,5 +11,6 @@ public class SistemaEncomiendas {
         lg.setVisible(true);
         //HolaMundo
         //XD PRUEBA LDKJF   LFDHKJ  REDA
+        //Segunda prueba
     }
 }
