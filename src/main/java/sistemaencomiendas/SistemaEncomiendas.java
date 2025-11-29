@@ -9,5 +9,6 @@ public class SistemaEncomiendas {
         ConexionSQL.conectar();
         ModuloLogin lg = new ModuloLogin();
         lg.setVisible(true);
+        //HolaMundo
     }
 }
