@@ -452,7 +452,7 @@ public class ModuloClientes extends javax.swing.JFrame {
             evt.consume();
         }
         
-        //Maximo 8 digitos
+        //Maximo 9 digitos
         if (txttelefono.getText().length() >= 9) {
             evt.consume();
         }

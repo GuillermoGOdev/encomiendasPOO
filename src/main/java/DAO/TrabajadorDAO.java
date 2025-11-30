@@ -11,40 +11,33 @@ import java.util.*;
 
 public class TrabajadorDAO {
     // REGISTRAR TRABAJADOR (requiere que ya exista Persona)
-    public int registrar(Trabajador t) {
+    public boolean registrar(Trabajador t) {
         String sql = "INSERT INTO Trabajador (idpersona, sueldo, estado, idcargo) "
                    + "VALUES (?, ?, ?, ?)";
+        
+        try (Connection con = ConexionSQL.conectar()) {
 
-        int idGenerado = -1;
-
-        try (Connection con = ConexionSQL.conectar();
-             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            con.setAutoCommit(false);
-
-            ps.setInt(1, t.getIdpersona());      // viene de Persona
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, t.getIdpersona());
             ps.setDouble(2, t.getSueldo());
             ps.setString(3, t.getEstado());
             ps.setInt(4, t.getIdCargo());
 
-            if (ps.executeUpdate() > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) idGenerado = rs.getInt(1);
-                con.commit();
-            } else con.rollback();
+            return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            System.err.println("Error registrando Trabajador: " + e.getMessage());
-        }
-
-        return idGenerado;
+            System.err.println("Error registrando Cliente: " + e.getMessage());
+            return false;
+        }   
     }
 
     // OBTENER POR ID
     public Trabajador obtenerPorId(int id) {
-        String sql = "SELECT t.*,  p.idpersona, p.nombres, p.apellido_paterno, p.apellido_materno, p.dni, "
-                + "p.telefono, p.email, p.direccionFROM Trabajador tINNER JOIN Persona p ON p.idpersona = "
-                + "t.idpersona WHERE t.idtrabajador = ?";
+        String sql = """
+                     SELECT t.*,  p.idpersona, p.nombres, p.apellido_paterno, p.apellido_materno, p.dni, 
+                 p.telefono, p.email, p.direccion FROM Trabajador t INNER JOIN Persona p ON p.idpersona = 
+                 t.idpersona WHERE t.idtrabajador = ?
+                         """;
 
         Trabajador trab = null;
 
@@ -67,9 +60,11 @@ public class TrabajadorDAO {
     public List<Trabajador> listar() {
         List<Trabajador> lista = new ArrayList<>();
 
-        String sql = "SELECT t.*, p.idpersona, p.nombres, p.apellido_paterno, p.apellido_materno, "
-                + "p.dni, p.telefono, p.email, p.direccionFROM Trabajador tINNER JOIN Persona p "
-                + "ON p.idpersona = t.idpersonaORDER BY t.idtrabajador";
+        String sql = """
+                     SELECT t.*, p.idpersona, p.nombres, p.apellido_paterno, p.apellido_materno, 
+                 p.dni, p.telefono, p.email, p.direccion FROM Trabajador t INNER JOIN Persona p 
+                 ON p.idpersona = t.idpersona ORDER BY t.idtrabajador
+                         """;
 
         try (Connection con = ConexionSQL.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
