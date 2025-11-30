@@ -69,6 +69,11 @@ public class ModuloRuta extends javax.swing.JFrame {
                 txtCostoBaseActionPerformed(evt);
             }
         });
+        txtCostoBase.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoBaseKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtCostoBase, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 220, 190, -1));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
@@ -121,13 +126,13 @@ public class ModuloRuta extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID Ruta", "Descripción", "Agencia Origen", "Agencia Destino", "Distancia(km)", "Tiempo estimado (Hrs)", "Costo base"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -160,6 +165,11 @@ public class ModuloRuta extends javax.swing.JFrame {
                 txtDistanciaActionPerformed(evt);
             }
         });
+        txtDistancia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDistanciaKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtDistancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 190, -1));
 
         txtTiempoEstimado.setBackground(new java.awt.Color(68, 68, 68));
@@ -173,6 +183,11 @@ public class ModuloRuta extends javax.swing.JFrame {
         txtTiempoEstimado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTiempoEstimadoActionPerformed(evt);
+            }
+        });
+        txtTiempoEstimado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTiempoEstimadoKeyTyped(evt);
             }
         });
         jPanel1.add(txtTiempoEstimado, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, 190, -1));
@@ -209,26 +224,77 @@ public class ModuloRuta extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
-            String descripcion = txtDescripcion.getText();
+            //VALIDACION DE CAMPOS VACÍOS
+            if (txtDescripcion.getText().trim().isEmpty()|| txtDistancia.getText().trim().isEmpty()
+                    || txtTiempoEstimado.getText().trim().isEmpty()
+                    || txtCostoBase.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(this,
+                        "Todos los campos deben estar llenos.","Campos vacíos",JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            // --- VALIDAR QUE LOS NUMÉRICOS SEAN CORRECTOS ---
+            double distanciaKm;
+            double tiempoEstimadoHoras;
+            double costoBase;
+
+            try {
+                distanciaKm = Double.parseDouble(txtDistancia.getText());
+                tiempoEstimadoHoras = Double.parseDouble(txtTiempoEstimado.getText());
+                costoBase = Double.parseDouble(txtCostoBase.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Los campos de distancia, tiempo y costo deben ser numéricos.",
+                        "Formato incorrecto",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            // VALIDAR QUE LOS NUMÉRICOS SEAN POSITIVOS
+            if (distanciaKm <= 0 || tiempoEstimadoHoras <= 0 || costoBase <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Los valores de distancia, tiempo y costo deben ser mayores que 0.",
+                        "Valor inválido",JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            // --- VALIDACION ORIGEN Y DESTINO ---
             int idAgenciaOrigen = Integer.parseInt(cboAgenciaOrigen.getSelectedItem().toString());
             int idAgenciaDestino = Integer.parseInt(cboAgenciaDestino.getSelectedItem().toString());
-            double distanciaKm = Double.parseDouble(txtDistancia.getText());
-            double tiempoEstimadoHoras = Double.parseDouble(txtTiempoEstimado.getText());
-            double costoBase = Double.parseDouble(txtCostoBase.getText());
-            
-            Ruta ruta = new Ruta(descripcion, idAgenciaOrigen, idAgenciaDestino, distanciaKm, tiempoEstimadoHoras, costoBase);
+
+            if (idAgenciaOrigen == idAgenciaDestino) {
+                JOptionPane.showMessageDialog(this,
+                        "La agencia origen y destino no pueden ser iguales.","Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String descripcion = txtDescripcion.getText();
+
+            Ruta ruta = new Ruta(
+                    descripcion,
+                    idAgenciaOrigen,
+                    idAgenciaDestino,
+                    distanciaKm,
+                    tiempoEstimadoHoras,
+                    costoBase
+            );
+
             RutaDAO dao = new RutaDAO();
-            
-            if(dao.registrarRuta(ruta)) {
+
+            if (dao.registrarRuta(ruta)) {
                 JOptionPane.showMessageDialog(this, "Registro correcto");
             } else {
-                JOptionPane.showMessageDialog(null, "Error: ");
+                JOptionPane.showMessageDialog(this, "No se pudo registrar la ruta.");
             }
-            
-            // descripcion, id_agencia_origen, id_agencia_destino, distancia_km, tiempo_estimado_horas, costo_base
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: "+e);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
         }
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtDistanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDistanciaActionPerformed
@@ -238,6 +304,27 @@ public class ModuloRuta extends javax.swing.JFrame {
     private void txtTiempoEstimadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTiempoEstimadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTiempoEstimadoActionPerformed
+
+    private void txtDistanciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDistanciaKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) && c != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDistanciaKeyTyped
+
+    private void txtTiempoEstimadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTiempoEstimadoKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) && c != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTiempoEstimadoKeyTyped
+
+    private void txtCostoBaseKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoBaseKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) && c != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCostoBaseKeyTyped
 
     /**
      * @param args the command line arguments
