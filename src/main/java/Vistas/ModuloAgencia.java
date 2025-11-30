@@ -2,6 +2,7 @@ package Vistas;
 
 import DAO.AgenciaDAO;
 import DTO.Agencia;
+import Controladores.*;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -11,19 +12,32 @@ public class ModuloAgencia extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ModuloAgencia.class.getName());
 
+    private ControladorModuloAgencia controlador;
     DefaultTableModel dtm = new DefaultTableModel();
     Object[] o = new Object[6];
     
     public ModuloAgencia() {
-        initComponents();
-        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setTitle("Modulo Agencia");
-        this.setResizable(false);
+        initComponents();        
         
-        cargarAgencias();
+        controlador = new ControladorModuloAgencia(this);
+        cargarAgencias(controlador.obtenerAgencias());
     }
 
+    // Getters para el controlador
+    public String getTextoABuscar() { return txtBuscar.getText(); }
+    
+    public int getidAgenciaSeleccionada() {
+        int fila = tabAgencias.getSelectedRow();
+        if (fila == -1) return -1;
+
+        int id = (int) tabAgencias.getValueAt(fila, 0);
+        return id;
+    }
+    
+    public void limpiarCampos() {
+        txtBuscar.setText("");
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,8 +54,10 @@ public class ModuloAgencia extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabAgencias = new javax.swing.JTable();
+        btnRefrescar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Módulo Agencia");
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -102,10 +118,21 @@ public class ModuloAgencia extends javax.swing.JFrame {
             tabAgencias.getColumnModel().getColumn(0).setPreferredWidth(3);
         }
 
+        btnRefrescar.setText("Refrescar");
+        btnRefrescar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefrescarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -116,17 +143,17 @@ public class ModuloAgencia extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnEditar)
                 .addGap(18, 18, 18)
-                .addComponent(btnEliminar)
-                .addContainerGap(29, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRefrescar)
+                    .addComponent(btnEliminar))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(18, 18, 18)
+                .addComponent(btnRefrescar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar)
@@ -139,43 +166,41 @@ public class ModuloAgencia extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        AgenciaDAO aDAO = new AgenciaDAO();
-        Agencia a = aDAO.buscarPorNombre(txtBuscar.getText());
+        cargarAgencias(controlador.buscarAgencia());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        AgenciaForm form = new AgenciaForm();
-        form.setVisible(true);
+        controlador.registrarAgencia();
+        cargarAgencias(controlador.obtenerAgencias());
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int fila = tabAgencias.getSelectedRow();
-        if (fila == -1) return;
-
-        int id = (int) tabAgencias.getValueAt(fila, 0);
-
-        // Abrir formulario cargando datos del ID
-        AgenciaForm form = new AgenciaForm(id);
-        form.setVisible(true);
+        controlador.editarAgencia();
+        cargarAgencias(controlador.obtenerAgencias());
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        //
+        controlador.eliminarAgencia();
+        cargarAgencias(controlador.obtenerAgencias());
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void cargarAgencias() {
+    private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
+        cargarAgencias(controlador.obtenerAgencias());
+    }//GEN-LAST:event_btnRefrescarActionPerformed
+
+    public void cargarAgencias(List<Agencia> agencias) {
         // Obtener el modelo de la tabla
         dtm = (DefaultTableModel) tabAgencias.getModel();
         
-        // Cargar datos de la BD
-        AgenciaDAO aDAO = new AgenciaDAO();
-        List<Agencia> lista = aDAO.listar();
+        while(dtm.getRowCount() > 0) {
+            dtm.removeRow(0);
+        }
         
-        Iterator<Agencia> itAgencia = lista.iterator();
-        
+        Iterator<Agencia> itAgencia = agencias.iterator();
         // Agregar las nuevas filas
         while(itAgencia.hasNext()) {
             Agencia a = itAgencia.next();
@@ -184,7 +209,7 @@ public class ModuloAgencia extends javax.swing.JFrame {
             o[2] = a.getDireccion();
             o[3] = a.getTelefono();
             o[4] = a.getEmail();
-            o[5] = a.getIdDistrito();
+            o[5] = controlador.obtenerNombreDistrito(a.getIdDistrito());
             dtm.addRow(o);
         }
     }
@@ -218,6 +243,7 @@ public class ModuloAgencia extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnRefrescar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabAgencias;

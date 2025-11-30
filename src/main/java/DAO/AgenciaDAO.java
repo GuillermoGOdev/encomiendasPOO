@@ -136,27 +136,34 @@ public class AgenciaDAO implements CRUD<Agencia>{
     
     
     // EXTRA
-    
-    public Agencia buscarPorNombre(String nombre) {
-        String sql = "SELECT * FROM Agencia WHERE nombre = ?";
-        Agencia agencia = null;
+
+    public List<Agencia> buscarPorNombre(String nombre) {
+        String sql = "SELECT * FROM Agencia WHERE nombre LIKE ?"; 
+        List<Agencia> lista = new ArrayList<>();
+
         try(Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, nombre);
+
+            // Concatenamos los comodines '%' en Java
+            ps.setString(1, "%" + nombre + "%"); 
+
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                agencia = new Agencia();
+
+            // obtener todos los resultados, no solo uno.
+            while(rs.next()) { 
+                Agencia agencia = new Agencia();
                 agencia.setIdAgencia(rs.getInt("idAgencia"));
                 agencia.setNombre(rs.getString("nombre"));
                 agencia.setDireccion(rs.getString("direccion"));
                 agencia.setTelefono(rs.getString("telefono"));
                 agencia.setEmail(rs.getString("email"));
                 agencia.setIdDistrito(rs.getInt("iddistrito"));
-            }    
+                lista.add(agencia);
+            }
         } catch(Exception e) {
             System.err.println("Error en AgenciaDAO.buscarPorNombre(): " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al buscar la agencia por nombre en la base de datos.", e);
         }
-        return agencia;
+        return lista;
     }
 }

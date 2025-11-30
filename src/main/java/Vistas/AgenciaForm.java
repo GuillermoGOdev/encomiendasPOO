@@ -1,6 +1,6 @@
 package Vistas;
 
-import Controladores.ControladorAgenciaForm;
+import Controladores.*;
 import DTO.Distrito;
 import DTO.Departamento;
 import DTO.Agencia;
@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 public class AgenciaForm extends javax.swing.JFrame {
     
     private ControladorAgenciaForm controlador;
+    private ControladorModuloAgencia controladorModulo;
     private boolean isProgrammaticChange = false; // Flag para controlar la carga de datos de los comboboxes
     
     // Modo registrar
@@ -40,6 +41,10 @@ public class AgenciaForm extends javax.swing.JFrame {
             cargarDatos(agenciaACargar);
         }
         // Los comboboxes se cargan usando el controlador
+    }
+    
+    public void setControladorModulo(ControladorModuloAgencia controladorPrincipal) {
+        this.controladorModulo = controladorPrincipal;
     }
 
     private boolean validarCampos() {
@@ -222,6 +227,11 @@ public class AgenciaForm extends javax.swing.JFrame {
                 txtTelefonoActionPerformed(evt);
             }
         });
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 270, -1));
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
@@ -382,12 +392,31 @@ public class AgenciaForm extends javax.swing.JFrame {
         }
         controlador.guardar();
         limpiarCampos();
+        
+        ModuloAgencia moduloPrincipal = controladorModulo.getVista(); // Obtenemos la vista principal
+        moduloPrincipal.cargarAgencias(controladorModulo.obtenerAgencias());
+        
+        this.dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // Cierra solo esta ventana
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        char c = evt.getKeyChar();
+        
+        //Solo numeros
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+        
+        //Maximo 9 digitos
+        if (txtTelefono.getText().length() >= 9) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
     
     public void cargarDatos(Agencia a) {
         
