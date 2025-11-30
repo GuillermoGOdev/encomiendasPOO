@@ -1,7 +1,9 @@
 package Vistas;
 
 import DAO.RutaDAO;
+import DTO.ParadaRuta;
 import DTO.Ruta;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class ModuloRuta extends javax.swing.JFrame {
@@ -26,21 +28,27 @@ public class ModuloRuta extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtCostoBase = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabRutas = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtDistancia = new javax.swing.JTextField();
         txtTiempoEstimado = new javax.swing.JTextField();
-        cboAgenciaDestino = new javax.swing.JComboBox<>();
-        cboAgenciaOrigen = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabParadas = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        cboAgencia = new javax.swing.JComboBox<>();
+        btnCancelar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        btnAgregarParada = new javax.swing.JButton();
+        btnEliminarParada = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 51));
@@ -54,7 +62,7 @@ public class ModuloRuta extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Módulo Ruta");
         jLabel5.setToolTipText("DNI");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, -1, 20));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, 20));
 
         txtCostoBase.setBackground(new java.awt.Color(68, 68, 68));
         txtCostoBase.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -74,19 +82,7 @@ public class ModuloRuta extends javax.swing.JFrame {
                 txtCostoBaseKeyTyped(evt);
             }
         });
-        jPanel1.add(txtCostoBase, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 220, 190, -1));
-
-        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Agencia de Origen: ");
-        jLabel6.setToolTipText("DNI");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 90, -1, 20));
-
-        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Agencia de Destino:");
-        jLabel7.setToolTipText("DNI");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, -1, 20));
+        jPanel1.add(txtCostoBase, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 140, -1));
 
         txtDescripcion.setBackground(new java.awt.Color(68, 68, 68));
         txtDescripcion.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -101,19 +97,19 @@ public class ModuloRuta extends javax.swing.JFrame {
                 txtDescripcionActionPerformed(evt);
             }
         });
-        jPanel1.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 190, -1));
+        jPanel1.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 310, -1));
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Tiempo estimado (Hrs):");
         jLabel9.setToolTipText("DNI");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, 20));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, -1, 20));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Distancia (km):");
         jLabel12.setToolTipText("DNI");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 80, 20));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 90, 80, 20));
 
         btnGuardar.setText("Guardar");
         btnGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -124,20 +120,37 @@ public class ModuloRuta extends javax.swing.JFrame {
         });
         jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 90, 30));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabRutas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID Ruta", "Descripción", "Agencia Origen", "Agencia Destino", "Distancia(km)", "Tiempo estimado (Hrs)", "Costo base"
+                "ID Ruta", "Descripción", "Costo base", "Tiempo estimado (Hrs)", "Distancia(km)"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+            };
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 630, 160));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tabRutas.setColumnSelectionAllowed(true);
+        tabRutas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tabRutas);
+        tabRutas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tabRutas.getColumnModel().getColumnCount() > 0) {
+            tabRutas.getColumnModel().getColumn(0).setPreferredWidth(1);
+            tabRutas.getColumnModel().getColumn(2).setPreferredWidth(2);
+            tabRutas.getColumnModel().getColumn(3).setPreferredWidth(2);
+            tabRutas.getColumnModel().getColumn(4).setPreferredWidth(2);
+        }
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 530, 200));
 
         jLabel13.setBackground(new java.awt.Color(255, 255, 255));
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
@@ -146,11 +159,11 @@ public class ModuloRuta extends javax.swing.JFrame {
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 20));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/ruta.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 30, 40));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 30, 40));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Costo base:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, -1, -1));
 
         txtDistancia.setBackground(new java.awt.Color(68, 68, 68));
         txtDistancia.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -170,7 +183,7 @@ public class ModuloRuta extends javax.swing.JFrame {
                 txtDistanciaKeyTyped(evt);
             }
         });
-        jPanel1.add(txtDistancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 190, -1));
+        jPanel1.add(txtDistancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 120, 140, -1));
 
         txtTiempoEstimado.setBackground(new java.awt.Color(68, 68, 68));
         txtTiempoEstimado.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -190,24 +203,74 @@ public class ModuloRuta extends javax.swing.JFrame {
                 txtTiempoEstimadoKeyTyped(evt);
             }
         });
-        jPanel1.add(txtTiempoEstimado, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, 190, -1));
+        jPanel1.add(txtTiempoEstimado, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 120, 140, -1));
 
-        cboAgenciaDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
-        jPanel1.add(cboAgenciaDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 190, -1));
+        tabParadas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Orden", "Agencia", "idAgencia"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
 
-        cboAgenciaOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
-        jPanel1.add(cboAgenciaOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 190, -1));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tabParadas.setColumnSelectionAllowed(true);
+        tabParadas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tabParadas);
+        tabParadas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tabParadas.getColumnModel().getColumnCount() > 0) {
+            tabParadas.getColumnModel().getColumn(0).setPreferredWidth(1);
+            tabParadas.getColumnModel().getColumn(2).setPreferredWidth(1);
+        }
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 220, 290, 320));
+
+        jLabel3.setText("Paradas:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 190, -1, -1));
+
+        cboAgencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        jPanel1.add(cboAgencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 240, 30));
+
+        btnCancelar.setText("Cancelar");
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 90, 30));
+
+        jLabel4.setText("Seleccionar Agencia:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+
+        btnAgregarParada.setText("Agregar parada");
+        jPanel1.add(btnAgregarParada, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 120, 30));
+
+        btnEliminarParada.setText("Eliminar parada");
+        jPanel1.add(btnEliminarParada, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 220, 120, 30));
+
+        btnEditar.setText("Editar");
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 290, 90, 30));
+
+        btnEliminar.setText("Eliminar");
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 80, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 707, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -239,6 +302,7 @@ public class ModuloRuta extends javax.swing.JFrame {
             double distanciaKm;
             double tiempoEstimadoHoras;
             double costoBase;
+            List<ParadaRuta> paradas;
 
             try {
                 distanciaKm = Double.parseDouble(txtDistancia.getText());
@@ -263,24 +327,17 @@ public class ModuloRuta extends javax.swing.JFrame {
             }
 
             // --- VALIDACION ORIGEN Y DESTINO ---
-            int idAgenciaOrigen = Integer.parseInt(cboAgenciaOrigen.getSelectedItem().toString());
-            int idAgenciaDestino = Integer.parseInt(cboAgenciaDestino.getSelectedItem().toString());
 
-            if (idAgenciaOrigen == idAgenciaDestino) {
-                JOptionPane.showMessageDialog(this,
-                        "La agencia origen y destino no pueden ser iguales.","Error", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            /*
 
             String descripcion = txtDescripcion.getText();
 
             Ruta ruta = new Ruta(
                     descripcion,
-                    idAgenciaOrigen,
-                    idAgenciaDestino,
-                    distanciaKm,
+                    costoBase,
                     tiempoEstimadoHoras,
-                    costoBase
+                    distanciaKm,
+                    paradas
             );
 
             RutaDAO dao = new RutaDAO();
@@ -290,6 +347,7 @@ public class ModuloRuta extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo registrar la ruta.");
             }
+            */
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
@@ -369,20 +427,26 @@ public class ModuloRuta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarParada;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarParada;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox<String> cboAgenciaDestino;
-    private javax.swing.JComboBox<String> cboAgenciaOrigen;
+    private javax.swing.JComboBox<Object> cboAgencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tabParadas;
+    private javax.swing.JTable tabRutas;
     private javax.swing.JTextField txtCostoBase;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDistancia;

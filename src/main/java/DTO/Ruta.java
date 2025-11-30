@@ -1,90 +1,81 @@
 package DTO;
 
+import java.util.List;
+
 public class Ruta {
 
-    private int idRuta, idAgenciaOrigen, idAgenciaDestino;
+    private int idRuta;
     private String descripcion;
-    private double distanciaKm, tiempoEstimadoHoras, costoBase;
+    private double costoBase, tiempoEstimadoHoras, distanciaKm;
+    private List<ParadaRuta> paradas;
     
     public Ruta(){
         
     }
-    
-    public Ruta(int idRuta, String descripcion, int idAgenciaOrigen,
-            int idAgenciaDestino, double distanciaKm, double tiempoEstimadoHoras, double costoBase) {
+
+    // Sin idRuta
+    public Ruta(String descripcion, double costoBase, double tiempoEstimadoHoras, double distanciaKm, List<ParadaRuta> paradas) {
+        this.descripcion = descripcion;
+        this.costoBase = costoBase;
+        this.tiempoEstimadoHoras = tiempoEstimadoHoras;
+        this.distanciaKm = distanciaKm;
+        this.paradas = paradas;
+    }
+
+    public Ruta(int idRuta, String descripcion, double costoBase, double tiempoEstimadoHoras, double distanciaKm, List<ParadaRuta> paradas) {
         this.idRuta = idRuta;
         this.descripcion = descripcion;
-        this.idAgenciaOrigen = idAgenciaOrigen;
-        this.idAgenciaDestino = idAgenciaDestino;
-        this.distanciaKm = distanciaKm;
-        this.tiempoEstimadoHoras = tiempoEstimadoHoras;
         this.costoBase = costoBase;
-    }
-    
-    // Sin id
-    public Ruta(String descripcion, int idAgenciaOrigen,
-            int idAgenciaDestino, double distanciaKm, double tiempoEstimadoHoras, double costoBase) {
-        this.descripcion = descripcion;
-        this.idAgenciaOrigen = idAgenciaOrigen;
-        this.idAgenciaDestino = idAgenciaDestino;
-        this.distanciaKm = distanciaKm;
         this.tiempoEstimadoHoras = tiempoEstimadoHoras;
-        this.costoBase = costoBase;
-    }
-
-    public void setIdRuta(int idRuta) {
-        this.idRuta = idRuta;
-    }
-
-    public void setIdAgenciaOrigen(int idAgenciaOrigen) {
-        this.idAgenciaOrigen = idAgenciaOrigen;
-    }
-
-    public void setIdAgenciaDestino(int idAgenciaDestino) {
-        this.idAgenciaDestino = idAgenciaDestino;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-    
-    public void setDistanciaKm(double distanciaKm) {
         this.distanciaKm = distanciaKm;
-    }
-
-    public void setTiempoEstimadoHoras(double tiempoEstimadoHoras) {
-        this.tiempoEstimadoHoras = tiempoEstimadoHoras;
-    }
-
-    public void setCostoBase(double costoBase) {
-        this.costoBase = costoBase;
+        this.paradas = paradas;
     }
 
     public int getIdRuta() {
         return idRuta;
     }
 
-    public int getIdAgenciaOrigen() {
-        return idAgenciaOrigen;
-    }
-
-    public int getIdAgenciaDestino() {
-        return idAgenciaDestino;
+    public void setIdRuta(int idRuta) {
+        this.idRuta = idRuta;
     }
 
     public String getDescripcion() {
         return descripcion;
     }
-    
-    public double getDistanciaKm() {
-        return distanciaKm;
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public double getCostoBase() {
+        return costoBase;
+    }
+
+    public void setCostoBase(double costoBase) {
+        this.costoBase = costoBase;
     }
 
     public double getTiempoEstimadoHoras() {
         return tiempoEstimadoHoras;
     }
 
-    public double getCostoBase() {
-        return costoBase;
+    public void setTiempoEstimadoHoras(double tiempoEstimadoHoras) {
+        this.tiempoEstimadoHoras = tiempoEstimadoHoras;
+    }
+
+    public double getDistanciaKm() {
+        return distanciaKm;
+    }
+
+    public void setDistanciaKm(double distanciaKm) {
+        this.distanciaKm = distanciaKm;
+    }
+
+    public List<ParadaRuta> getParadas() {
+        return paradas;
+    }
+
+    public void setParadas(List<ParadaRuta> paradas) {
+        this.paradas = paradas;
     }
 }

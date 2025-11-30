@@ -7,7 +7,8 @@ import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 
 public class RutaDAO {
-    
+
+/*    
     public boolean registrarRuta(Ruta r) {
         String sql = "INSERT INTO Ruta (descripcion, id_agencia_origen, id_agencia_destino, distancia_km, tiempo_estimado_horas, costo_base) VALUES (?, ?, ?, ?, ?, ?)";
         boolean ok = false;
@@ -34,4 +35,5 @@ public class RutaDAO {
         
         return ok;
     }
+*/
 }
