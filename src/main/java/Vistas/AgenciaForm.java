@@ -6,6 +6,7 @@ import DTO.Departamento;
 import DTO.Agencia;
 import DTO.Provincia;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class AgenciaForm extends javax.swing.JFrame {
     
@@ -41,6 +42,50 @@ public class AgenciaForm extends javax.swing.JFrame {
         // Los comboboxes se cargan usando el controlador
     }
 
+    private boolean validarCampos() {
+        // 1. Campos Vacíos
+        if (txtNombre.getText().trim().isEmpty() || 
+            txtDireccion.getText().trim().isEmpty() ||
+            txtTelefono.getText().trim().isEmpty() || 
+            txtEmail.getText().trim().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos de texto.", "Validación de Formato", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // 2. Validación de Teléfono (9 dígitos numéricos)
+        String telefono = txtTelefono.getText().trim();
+        if (!telefono.matches("\\d{9}")) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe contener exactamente 9 dígitos numéricos.", "Validación de Formato", JOptionPane.WARNING_MESSAGE);
+            txtTelefono.requestFocus();
+            return false;
+        }
+
+        // 3. Validación de Email (Formato básico)
+        String email = txtEmail.getText().trim();
+        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            JOptionPane.showMessageDialog(this, "El formato del correo electrónico es inválido.", "Validación de Formato", JOptionPane.WARNING_MESSAGE);
+            txtEmail.requestFocus();
+            return false;
+        }
+        
+        // 4. Validación de Selección de Ubicación
+        if (getDepartamentoSeleccionado() == null) {
+             JOptionPane.showMessageDialog(this, "Debe seleccionar un Departamento.", "Validación Incompleta", JOptionPane.WARNING_MESSAGE);
+             return false;
+        }
+        if (getProvinciaSeleccionada() == null) {
+             JOptionPane.showMessageDialog(this, "Debe seleccionar una Provincia.", "Validación Incompleta", JOptionPane.WARNING_MESSAGE);
+             return false;
+        }
+        if (getDistritoSeleccionado() == null) {
+             JOptionPane.showMessageDialog(this, "Debe seleccionar un Distrito.", "Validación Incompleta", JOptionPane.WARNING_MESSAGE);
+             return false;
+        }
+
+        return true; 
+    }
+    
     // Getters para el controlador
     public String getNombre() { return txtNombre.getText(); }
     public String getDireccion() { return txtDireccion.getText(); }
@@ -332,6 +377,9 @@ public class AgenciaForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cboDistritoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (!validarCampos()) {
+            return; // Detiene la ejecución si la validación de la Vista falla
+        }
         controlador.guardar();
         limpiarCampos();
     }//GEN-LAST:event_btnGuardarActionPerformed
