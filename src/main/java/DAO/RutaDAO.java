@@ -4,36 +4,127 @@ import Conexion.ConexionSQL;
 import DTO.Ruta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RutaDAO {
 
-/*    
-    public boolean registrarRuta(Ruta r) {
-        String sql = "INSERT INTO Ruta (descripcion, id_agencia_origen, id_agencia_destino, distancia_km, tiempo_estimado_horas, costo_base) VALUES (?, ?, ?, ?, ?, ?)";
-        boolean ok = false;
+    public int registrar(Ruta r) {
+        String sql = "INSERT INTO Ruta (descripcion, costo_base, tiempo_estimado_horas, distancia_km) VALUES (?, ?, ?, ?)";
+        int idGenerado = -1;
+        try(Connection con = ConexionSQL.conectar();
+                PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
+            con.setAutoCommit(false);
+            ps.setString(1, r.getDescripcion());
+            ps.setDouble(2, r.getCostoBase());
+            ps.setDouble(3, r.getTiempoEstimadoHoras());
+            ps.setDouble(4, r.getDistanciaKm());
+            
+            if (ps.executeUpdate() > 0) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) idGenerado = rs.getInt(1);
+                con.commit();
+            } else {
+                con.rollback();
+            }
+        } catch(Exception e) {
+            System.err.println("Error en RutaDAO.registrar(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al registrar la Ruta en la base de datos.", e);
+        }
+        return idGenerado;
+    }
 
-        try (Connection con = ConexionSQL.conectar(); PreparedStatement psRuta = con.prepareStatement(sql)) {
-            con.setAutoCommit(false); // Desactivar el guardar cambios automaticamente
+    public boolean eliminar(int indice) {
+        String sql = "DELETE FROM Ruta WHERE id_ruta = ?";
+        boolean ok = false;
+        try(Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)){
+            con.setAutoCommit(false);
+            ps.setInt(1, indice);
             
-            psRuta.setString(1, r.getDescripcion());
-            psRuta.setInt(2, r.getIdAgenciaOrigen());
-            psRuta.setInt(3, r.getIdAgenciaDestino());
-            psRuta.setDouble(4, r.getDistanciaKm());
-            psRuta.setDouble(5, r.getTiempoEstimadoHoras());
-            psRuta.setDouble(6, r.getCostoBase());
-            
-            if(psRuta.executeUpdate() > 0) {
-                con.commit(); // commit para guardar los cambios tras la insercion
+            if(ps.executeUpdate() > 0) {
+                con.commit();
                 ok = true;
             } else {
                 con.rollback();
             }
         } catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al registrar la ruta: "+e);
+            System.err.println("Error en RutaDAO.eliminar(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al eliminar la Ruta de la base de datos.", e);
         }
-        
         return ok;
     }
-*/
+
+    public boolean modificar(Ruta r) {
+        String sql = "UPDATE Ruta SET descripcion=?, costo_base=?, tiempo_estimado_horas=?, distancia_km=? WHERE id_ruta=?";
+        boolean ok = false;
+        try(Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+            con.setAutoCommit(false);
+            ps.setString(1, r.getDescripcion());
+            ps.setDouble(2, r.getCostoBase());
+            ps.setDouble(3, r.getTiempoEstimadoHoras());
+            ps.setDouble(4, r.getDistanciaKm());
+            ps.setInt(5, r.getIdRuta());
+            
+            if(ps.executeUpdate()>0) {
+                con.commit();
+                ok = true;
+            } else {
+                con.rollback();
+            }
+        } catch(Exception e) {
+            System.err.println("Error en RutaDAO.modificar(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al modificar la Ruta en la base de datos.", e);
+        }
+        return ok;
+    }
+
+    public Ruta buscar(int indice) {
+        String sql = "SELECT * FROM Ruta WHERE id_ruta = ?";
+        try(Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, indice);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return mapear(rs);
+            }    
+        } catch(Exception e) {
+            System.err.println("Error en RutaDAO.buscar(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al buscar la Ruta por ID en la base de datos.", e);
+        }
+        return null;
+    }
+
+    public List<Ruta> listar() {
+        String sql = "SELECT * FROM Ruta";
+        List<Ruta> lista = new ArrayList<>();
+        
+        try(Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();    
+            while(rs.next()) {
+                lista.add(mapear(rs));
+            }    
+        } catch(Exception e) {
+            System.err.println("Error en RutaDAO.listar(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al listar Rutas de la base de datos.", e);
+        }
+        return lista;
+    }
+    
+    // --- Método para mapear un ResultSet a un objeto Ruta ---
+    private Ruta mapear(ResultSet rs) throws Exception {
+        Ruta ruta = new Ruta();
+        
+        ruta.setIdRuta(rs.getInt("id_ruta"));
+        ruta.setDescripcion(rs.getString("descripcion"));
+        ruta.setCostoBase(rs.getDouble("costo_base"));
+        ruta.setTiempoEstimadoHoras(rs.getDouble("tiempo_estimado_horas"));
+        ruta.setDistanciaKm(rs.getDouble("distancia_km"));
+        
+        return ruta;
+    }
 }

@@ -1,19 +1,30 @@
 package Vistas;
 
+import Controladores.*;
 import DAO.RutaDAO;
+import DTO.Agencia;
 import DTO.ParadaRuta;
 import DTO.Ruta;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class ModuloRuta extends javax.swing.JFrame {
+    
+    private int idRutaActual = -1;
+    private int IdParadaActual = -1;
+    private boolean modoEdicion = false;
+    private ControladorRuta controlador;
+    private boolean recargarCboAgencia = false;
+    private int cantidadParadas = 0;
 
     public ModuloRuta() {
         initComponents();
-        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setTitle("Modulo Ruta");
-        this.setResizable(false);
+        controlador = new ControladorRuta();
+        cargarTablaRutas();
+        recargarCboAgencia = true;
     }
 
     /**
@@ -50,8 +61,10 @@ public class ModuloRuta extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modulo Ruta");
         setBackground(new java.awt.Color(51, 51, 51));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
@@ -207,10 +220,7 @@ public class ModuloRuta extends javax.swing.JFrame {
 
         tabParadas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Orden", "Agencia", "idAgencia"
@@ -235,19 +245,38 @@ public class ModuloRuta extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 220, 290, 320));
 
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Paradas:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 190, -1, -1));
 
         cboAgencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        cboAgencia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cboAgenciaFocusGained(evt);
+            }
+        });
+        cboAgencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboAgenciaActionPerformed(evt);
+            }
+        });
         jPanel1.add(cboAgencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 240, 30));
 
         btnCancelar.setText("Cancelar");
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 90, 30));
 
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Seleccionar Agencia:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
         btnAgregarParada.setText("Agregar parada");
+        btnAgregarParada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarParadaActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAgregarParada, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 120, 30));
 
         btnEliminarParada.setText("Eliminar parada");
@@ -299,10 +328,36 @@ public class ModuloRuta extends javax.swing.JFrame {
             }
 
             // --- VALIDAR QUE LOS NUMÉRICOS SEAN CORRECTOS ---
-            double distanciaKm;
-            double tiempoEstimadoHoras;
-            double costoBase;
-            List<ParadaRuta> paradas;
+            double distanciaKm = Double.parseDouble(txtDistancia.getText());
+            double tiempoEstimadoHoras = Double.parseDouble(txtTiempoEstimado.getText());
+            double costoBase = Double.parseDouble(txtCostoBase.getText());
+            String descripcion = txtDescripcion.getText();
+            
+            DefaultTableModel modelo = (DefaultTableModel) tabParadas.getModel();
+            List<ParadaRuta> paradas = new ArrayList<>();
+            
+            // int idRuta, int idAgencia, int orden, String nombreAgencia
+            
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                int orden = (int) modelo.getValueAt(i, 0);
+                String nombreAgencia = (String) modelo.getValueAt(i, 1);
+                int idAgencia = (int) modelo.getValueAt(i, 2);
+                
+                ParadaRuta parada = new ParadaRuta();
+                parada.setOrden(orden);
+                parada.setNombreAgencia(nombreAgencia);
+                parada.setIdAgencia(idAgencia);
+                
+                paradas.add(parada);
+            }
+
+            Ruta ruta = new Ruta(
+                    descripcion,
+                    costoBase,
+                    tiempoEstimadoHoras,
+                    distanciaKm,
+                    paradas
+            );
 
             try {
                 distanciaKm = Double.parseDouble(txtDistancia.getText());
@@ -326,28 +381,11 @@ public class ModuloRuta extends javax.swing.JFrame {
                 return;
             }
 
-            // --- VALIDACION ORIGEN Y DESTINO ---
-
-            /*
-
-            String descripcion = txtDescripcion.getText();
-
-            Ruta ruta = new Ruta(
-                    descripcion,
-                    costoBase,
-                    tiempoEstimadoHoras,
-                    distanciaKm,
-                    paradas
-            );
-
-            RutaDAO dao = new RutaDAO();
-
-            if (dao.registrarRuta(ruta)) {
+            if (controlador.registrarRuta(ruta, paradas)) {
                 JOptionPane.showMessageDialog(this, "Registro correcto");
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo registrar la ruta.");
             }
-            */
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
@@ -384,6 +422,46 @@ public class ModuloRuta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCostoBaseKeyTyped
 
+    private void cboAgenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAgenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboAgenciaActionPerformed
+
+    // Cargar las Agencias al darle click por primera vez al combobox
+    private void cboAgenciaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cboAgenciaFocusGained
+        if (!recargarCboAgencia) {
+            return;
+        }
+        List<Agencia> agencias = controlador.obtenerAgencias();
+        llenarCboAgencias(agencias);
+        // Desactivar la recarga de agencias;
+        recargarCboAgencia = false;
+    }//GEN-LAST:event_cboAgenciaFocusGained
+
+    private void btnAgregarParadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarParadaActionPerformed
+        if(!modoEdicion) {
+            DefaultTableModel modelo = (DefaultTableModel) tabParadas.getModel();
+            Agencia agenciaSeleccionada = (Agencia) cboAgencia.getSelectedItem();
+            cantidadParadas++;
+            modelo.addRow(new Object[]{
+                cantidadParadas,
+                agenciaSeleccionada.getNombre(),
+                agenciaSeleccionada.getIdAgencia()}
+            );
+        }
+    }//GEN-LAST:event_btnAgregarParadaActionPerformed
+
+    private void llenarCboAgencias(List<Agencia> agencias) {
+        if(agencias != null) {
+            for(Agencia a : agencias) {
+                cboAgencia.addItem(a);
+            }
+        }
+    }
+    
+    public void cargarTablaRutas() {
+        //
+    }
+    
     /**
      * @param args the command line arguments
      */

@@ -2,21 +2,25 @@ package DTO;
 
 // Una Ruta tiene varias ParadaRuta y cada una de estas apunta a una Agencia
 public class ParadaRuta {
-    private int idParadaRuta, idRuta, orden;
-    private Agencia agencia;
+    private int idParadaRuta, idRuta, idAgencia, orden;
+    private String nombreAgencia;
 
-    // Sin el idParadaRuta para inserciones a la BD
-    public ParadaRuta(int idRuta, int orden, Agencia agencia) {
+    public ParadaRuta() {};
+    
+    // Sin el idParadaRuta para inserciones a la BD// Sin el idParadaRuta para inserciones a la BD
+    public ParadaRuta(int idRuta, int idAgencia, int orden, String nombreAgencia) {
         this.idRuta = idRuta;
+        this.idAgencia = idAgencia;
         this.orden = orden;
-        this.agencia = agencia;
+        this.nombreAgencia = nombreAgencia;
     }
 
-    public ParadaRuta(int idParadaRuta, int idRuta, int orden, Agencia agencia) {
+    public ParadaRuta(int idParadaRuta, int idRuta, int idAgencia, int orden, String nombreAgencia) {
         this.idParadaRuta = idParadaRuta;
         this.idRuta = idRuta;
+        this.idAgencia = idAgencia;
         this.orden = orden;
-        this.agencia = agencia;
+        this.nombreAgencia = nombreAgencia;
     }
 
     public int getIdParadaRuta() {
@@ -35,6 +39,14 @@ public class ParadaRuta {
         this.idRuta = idRuta;
     }
 
+    public int getIdAgencia() {
+        return idAgencia;
+    }
+
+    public void setIdAgencia(int idAgencia) {
+        this.idAgencia = idAgencia;
+    }
+
     public int getOrden() {
         return orden;
     }
@@ -43,11 +55,11 @@ public class ParadaRuta {
         this.orden = orden;
     }
 
-    public Agencia getAgencia() {
-        return agencia;
+    public String getNombreAgencia() {
+        return nombreAgencia;
     }
 
-    public void setAgencia(Agencia agencia) {
-        this.agencia = agencia;
+    public void setNombreAgencia(String nombreAgencia) {
+        this.nombreAgencia = nombreAgencia;
     }
 }
