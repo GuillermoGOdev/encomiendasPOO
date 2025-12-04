@@ -57,7 +57,9 @@ public class Trabajador extends Persona {
     public void setIdCargo(int IdCargo) {
         this.IdCargo = IdCargo;
     }
-    
-    
 
+    @Override
+    public String toString() {
+        return getNombres() + " " + getApellido_paterno() + " " + getApellido_materno();
+    }
 }

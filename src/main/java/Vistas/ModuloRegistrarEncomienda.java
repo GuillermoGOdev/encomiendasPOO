@@ -1,13 +1,26 @@
 
 package Vistas;
 import Controladores.*;
+import DTO.Agencia;
+import DTO.MetodoPago;
+import DTO.TipoPaquete;
+import DTO.Trabajador;
+import java.awt.Color;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 
 public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private ControladorEncomienda controladorEncomienda;
     
     public ModuloRegistrarEncomienda() {
         initComponents();
+        cargarAgencias();
+        cargarTipoPaquete();
+        desactivarCamposDimensiones();
+        cargarTrabajadores();
+        cargarMetodosPago();
     }
 
     
@@ -26,6 +39,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         txtNombreRemitente = new javax.swing.JTextField();
         txtDNIRemitente = new javax.swing.JTextField();
         txtTelefonoRemitente = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taDescripcionEncomienda = new javax.swing.JTextArea();
@@ -110,27 +124,34 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Teléfono");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(58, 58, 58)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtNombreRemitente)
-                    .addComponent(txtDNIRemitente)
-                    .addComponent(txtTelefonoRemitente, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(58, 58, 58)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNombreRemitente)
+                            .addComponent(txtDNIRemitente)
+                            .addComponent(txtTelefonoRemitente, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtNombreRemitente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -142,7 +163,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtTelefonoRemitente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         jPanel4.setBackground(new java.awt.Color(51, 51, 51));
@@ -181,7 +202,11 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Tipo:");
 
-        cboTipoEncomienda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--", "Documento", "Paquete", "Frágil", "Sobredimensionado" }));
+        cboTipoEncomienda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboTipoEncomiendaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -313,30 +338,24 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Agencia destino:");
 
-        cboAgenciaOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cboAgenciaDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Métodos de pago:");
 
         btnGrupoPago.add(rbnEfectivo);
         rbnEfectivo.setForeground(new java.awt.Color(255, 255, 255));
-        rbnEfectivo.setText("Efectivo");
+        rbnEfectivo.setText("1");
 
         btnGrupoPago.add(rbnTarjeta);
         rbnTarjeta.setForeground(new java.awt.Color(255, 255, 255));
-        rbnTarjeta.setText("Tarjeta");
+        rbnTarjeta.setText("2");
 
         btnGrupoPago.add(rbnYape);
         rbnYape.setForeground(new java.awt.Color(255, 255, 255));
-        rbnYape.setText("Yape");
+        rbnYape.setText("3");
 
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Total a Pagar (S/): ");
-
-        cboTrabajador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(255, 255, 255));
@@ -493,16 +512,133 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         String costo = txtValorDeclarado.getText();
         
         
-        
-        /*if (respuesta.equals("OK")) {
-            JOptionPane.showMessageDialog(this, "Encomienda registrada exitosamente","Registro Exitoso",JOptionPane.INFORMATION_MESSAGE);
-        } else {
-        }*/
+       
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void cboTipoEncomiendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTipoEncomiendaActionPerformed
+        TipoPaquete tipo = (TipoPaquete) cboTipoEncomienda.getSelectedItem();
+        if (tipo ==null) {
+             return;
+        }
+        
+        if (tipo.getNombre().equals("Seleccionar...")) {
+            desactivarCamposDimensiones();
+            txtPeso.setText("");
+            txtLargo.setText("");
+            txtAncho.setText("");
+            txtAlto.setText("");
+            return;
+        }
+        
+        txtPeso.setEnabled(true);
+        txtLargo.setEnabled(true);
+        txtAncho.setEnabled(true);
+        txtAlto.setEnabled(true);
+        
+        txtPeso.setText("");
+        txtLargo.setText("");
+        txtAncho.setText("");
+        txtAlto.setText("");
+        
+        JOptionPane.showMessageDialog(this, "Límites del tipo seleccionado:\n" +
+        "- Peso máximo: " + tipo.getMaxPeso() + " kg\n" +
+        "- Largo: " + tipo.getMaxLargo() + " cm\n" +
+        "- Ancho: " + tipo.getMaxAncho() + " cm\n" +
+        "- Alto: " + tipo.getMaxAlto() + " cm\n ");
+        
+        setPlaceholder(txtPeso,"Máx:  "+ tipo.getMaxPeso() + "kg");
+        setPlaceholder(txtLargo,"Máx:  "+ tipo.getMaxLargo() + "cm");
+        setPlaceholder(txtAncho,"Máx:  "+ tipo.getMaxAncho()+ "cm");
+        setPlaceholder(txtAlto,"Máx:  "+ tipo.getMaxAlto()+ "cm");
+    }//GEN-LAST:event_cboTipoEncomiendaActionPerformed
+
+    private void setPlaceholder(JTextField txt, String placeholder) {
+    txt.setText(placeholder);
+    txt.setForeground(Color.GRAY);
+
+    txt.addFocusListener(new java.awt.event.FocusAdapter() {
+        @Override
+        public void focusGained(java.awt.event.FocusEvent e) {
+            if (txt.getText().equals(placeholder)) {
+                txt.setText("");
+                txt.setForeground(Color.BLACK);
+            }
+        }
+
+        @Override
+        public void focusLost(java.awt.event.FocusEvent e) {
+            if (txt.getText().trim().isEmpty()) {
+                txt.setText(placeholder);
+                txt.setForeground(Color.GRAY);
+            }
+        }
+    });
+}
+    
     public void limpiarCampos(){
         
     }
+    
+    private void cargarAgencias(){
+        ControladorAgenciaForm ctrl = new ControladorAgenciaForm();
+        List<Agencia> lista = ctrl.listar();
+        
+        cboAgenciaOrigen.removeAllItems();
+        cboAgenciaDestino.removeAllItems();
+        
+        for (Agencia a : lista) {
+            cboAgenciaOrigen.addItem(a);
+            cboAgenciaDestino.addItem(a);
+        }
+    }
+    
+    private void cargarTrabajadores(){
+        cboTrabajador.removeAllItems();
+        
+        ControladorTrabajador ctrl = new ControladorTrabajador();
+        //Obtenemos la lista desde el controlador
+        List<Trabajador> lista = ctrl.listarTrabajadores();
+        
+        Trabajador seleccion = new Trabajador();
+        seleccion.setIdTrabajador(0);
+        seleccion.setNombres("Seleccione...");
+        seleccion.setApellido_paterno("");
+        seleccion.setApellido_materno("");
+        
+        cboTrabajador.addItem(seleccion);
+        
+        for (Trabajador t : lista) {
+            cboTrabajador.addItem(t);
+        }
+    }
+    
+    private void cargarTipoPaquete(){
+        cboTipoEncomienda.removeAllItems();
+        
+        cboTipoEncomienda.addItem(new TipoPaquete("Seleccionar...", 0, 0, 0, 0));
+        cboTipoEncomienda.addItem(new TipoPaquete("Sobre", 0.250, 15, 10, 10));
+        cboTipoEncomienda.addItem(new TipoPaquete("Caja paquete XXS", 0.250, 15, 10, 10));
+        cboTipoEncomienda.addItem(new TipoPaquete("Caja paquete XS", 0.500, 15, 20, 12));
+        cboTipoEncomienda.addItem(new TipoPaquete("Caja paquete S", 2, 20, 30, 12));
+        cboTipoEncomienda.addItem(new TipoPaquete("Caja paquete M", 5, 24, 30, 20));
+        cboTipoEncomienda.addItem(new TipoPaquete("Caja paquete L", 10, 42, 30, 23));
+    }
+    
+    private void cargarMetodosPago(){
+        ControladorMetodoPago ctrl = new ControladorMetodoPago();
+        List<MetodoPago> lista = ctrl.obtenerMetodosPago();
+        rbnEfectivo.setText(lista.get(0).getNombre());
+        rbnTarjeta.setText(lista.get(1).getNombre());
+        rbnYape.setText(lista.get(2).getNombre());
+    }
+    
+    private void desactivarCamposDimensiones(){
+        txtPeso.setEnabled(false);
+        txtLargo.setEnabled(false);
+        txtAncho.setEnabled(false);
+        txtAlto.setEnabled(false);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -540,10 +676,11 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGrupoPago;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnRegistrar;
-    private javax.swing.JComboBox<String> cboAgenciaDestino;
-    private javax.swing.JComboBox<String> cboAgenciaOrigen;
-    private javax.swing.JComboBox<String> cboTipoEncomienda;
-    private javax.swing.JComboBox<String> cboTrabajador;
+    private javax.swing.JComboBox<Agencia> cboAgenciaDestino;
+    private javax.swing.JComboBox<Agencia> cboAgenciaOrigen;
+    private javax.swing.JComboBox<TipoPaquete> cboTipoEncomienda;
+    private javax.swing.JComboBox<Trabajador> cboTrabajador;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

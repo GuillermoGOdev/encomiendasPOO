@@ -77,6 +77,6 @@ public class Agencia {
     
     @Override
     public String toString() {
-        return this.nombre;
+        return nombre;
     }
 }

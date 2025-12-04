@@ -26,13 +26,13 @@ public class ControladorTrabajador {
             return false;
         }
 
-        // 2. Registrar cliente
+        // 2. Registrar trabajador
         t.setIdpersona(idPersona);
 
         return trabajadorDAO.registrar(t);
     }
     
-    // LISTAR CLIENTES
+    // LISTAR TRABAJADORES
     public List<Trabajador> listarTrabajadores() {
         return trabajadorDAO.listar();
     }

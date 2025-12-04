@@ -20,6 +20,12 @@ public class ControladorAgenciaForm {
 
     // COMENTARIO DE PRUEBA
 
+    public ControladorAgenciaForm() {
+        dao = new AgenciaDAO();
+    }
+
+    
+    
     // Constructor para registrar
     public ControladorAgenciaForm(AgenciaForm vista) {
         this.vista = vista;
@@ -213,5 +219,9 @@ public class ControladorAgenciaForm {
                 JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+    
+    public List<Agencia> listar(){
+        return dao.listar();
     }
 }

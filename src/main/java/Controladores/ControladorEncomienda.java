@@ -1,15 +1,22 @@
 
 package Controladores;
 
+import DAO.ClienteDAO;
 import DAO.EncomiendaDAO;
+import DAO.RutaDAO;
 import DTO.Encomienda;
 
 
 public class ControladorEncomienda {
     private EncomiendaDAO dao;
+    private final ClienteDAO clienteDAO;
+    private final RutaDAO rutaDAO;
 
     public ControladorEncomienda() {
         this.dao = new EncomiendaDAO();
+        this.clienteDAO = new ClienteDAO();
+        this.rutaDAO = new RutaDAO();
+        
     }
     
     // MÉTODO PRINCIPAL: REGISTRAR ENCOMIENDA
