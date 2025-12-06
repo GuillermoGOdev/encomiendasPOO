@@ -113,4 +113,27 @@ public class VehiculoDAO {
         }
         return ok;
     }
+    
+    public List<Vehiculo> listarVehiculosCombo() {
+    List<Vehiculo> lista = new ArrayList<>();
+    String sql = "SELECT id_vehiculo, placa FROM Vehiculo";
+
+    try (Connection con = ConexionSQL.conectar();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            Vehiculo v = new Vehiculo();
+            v.setIdVehiculo(rs.getInt("id_vehiculo"));
+            v.setPlaca(rs.getString("placa"));
+            lista.add(v);
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al cargar vehículos en combo: " + e.getMessage());
+    }
+
+    return lista;
+}
+    
 }

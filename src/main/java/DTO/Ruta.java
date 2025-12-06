@@ -8,9 +8,9 @@ public class Ruta {
     private String descripcion;
     private double costoBase, tiempoEstimadoHoras, distanciaKm;
     private List<ParadaRuta> paradas;
-    
-    public Ruta(){
-        
+
+    public Ruta() {
+
     }
 
     // Sin idRuta
@@ -77,5 +77,10 @@ public class Ruta {
 
     public void setParadas(List<ParadaRuta> paradas) {
         this.paradas = paradas;
+    }
+
+    @Override
+    public String toString() {
+        return descripcion; // O el campo que quieras mostrar en tu combo
     }
 }

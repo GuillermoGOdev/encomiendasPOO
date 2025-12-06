@@ -76,4 +76,9 @@ public class Vehiculo {
         this.Estado = Estado;
     }
 
+    @Override
+    public String toString() {
+        return Placa; 
+    }
+
 }
