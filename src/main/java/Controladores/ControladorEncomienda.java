@@ -50,29 +50,15 @@ public class ControladorEncomienda {
             int idDestinatario,
             int idRuta,
             String descripcion,
-            String peso,
-            String largo,
-            String alto,
-            String ancho,
-            String costo,
-            int idTrabajador
-            
-            /*
-            id_encomienda int AI PK 
-id_cliente_remitente int 
-id_cliente_destinatario int 
-id_ruta int 
-descripcion varchar(255) 
-peso_kg decimal(8,2) 
-largo decimal(18,2) 
-alto decimal(18,2) 
-ancho decimal(8,2) 
-costo_envio decimal(10,2) 
-fecha_envio date 
-estado varchar(50) 
-idtrabajador int 
-idMetodoPago
-            */
+            double peso,
+            double largo,
+            double alto,
+            double ancho,
+            double costo,
+            String fecha_envio,
+            String estado,
+            int idTrabajador,
+            int idMetodoPago
     ) {
 
         // VALIDACIONES
@@ -81,10 +67,10 @@ idMetodoPago
         if (idRuta <= 0) return "Debe seleccionar una ruta.";
         if (descripcion == null || descripcion.trim().isEmpty()) return "La descripción es obligatoria.";
 
+        /*
         // Validar campos vacíos numéricos
         if (peso.isEmpty() || largo.isEmpty() || alto.isEmpty() || ancho.isEmpty() || costo.isEmpty())
             return "Todos los campos numéricos son obligatorios.";
-
         
         // Validar números
         double pesoD, largoD, altoD, anchoD, costoD;
@@ -103,7 +89,7 @@ idMetodoPago
         if (largoD <= 0 || altoD <= 0 || anchoD <= 0)
             return "Las dimensiones deben ser mayores a 0.";
         if (costoD < 0) return "El costo no puede ser negativo.";
-
+        */
         
         // CREAR OBJETO ENCOMIENDA
         Encomienda en = new Encomienda();
@@ -111,14 +97,15 @@ idMetodoPago
         en.setIdClienteDestinatario(idDestinatario);
         en.setIdRuta(idRuta);
         en.setDescripcion(descripcion);
-        en.setPeso_kg(pesoD);
-        en.setLargo(largoD);
-        en.setAlto(altoD);
-        en.setAncho(anchoD);
-        en.setCostoEnvio(costoD);
-        en.setFecha_Envio(new java.util.Date());
-        en.setEstado("En tránsito");
+        en.setPeso_kg(peso);
+        en.setLargo(largo);
+        en.setAlto(alto);
+        en.setAncho(ancho);
+        en.setCostoEnvio(costo);
+        en.setFecha_Envio(fecha_envio);
+        en.setEstado(estado);
         en.setIdTrabajador(idTrabajador);
+        en.setIdMetodoPago(idMetodoPago);
 
         // GUARDAR
         boolean guardado = dao.registrar(en);

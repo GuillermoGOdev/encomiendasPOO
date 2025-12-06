@@ -8,6 +8,7 @@ import DTO.Ruta;
 import DTO.TipoPaquete;
 import DTO.Trabajador;
 import java.awt.Color;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -20,6 +21,8 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private double fleteInicial;
     private double fleteFinal = -1;
     private boolean datosEncomiendaCompletos = false;
+    private int idRemitente;
+    private int idDestinatario;
     
     public ModuloRegistrarEncomienda() {
         initComponents();
@@ -428,6 +431,11 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         btnGrupoPago.add(rbnEfectivo);
         rbnEfectivo.setForeground(new java.awt.Color(255, 255, 255));
         rbnEfectivo.setText("1");
+        rbnEfectivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbnEfectivoActionPerformed(evt);
+            }
+        });
 
         btnGrupoPago.add(rbnTarjeta);
         rbnTarjeta.setForeground(new java.awt.Color(255, 255, 255));
@@ -439,6 +447,12 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
 
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Total a Pagar (S/): ");
+
+        cboTrabajador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboTrabajadorActionPerformed(evt);
+            }
+        });
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(255, 255, 255));
@@ -585,16 +599,41 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-
+      
         String descripcion = taDescripcionEncomienda.getText();
-        String peso = txtPeso.getText();
-        String largo = txtLargo.getText();
-        String alto = txtAlto.getText();
-        String ancho = txtAncho.getText();
-        String costo = txtFlete.getText();
-        
+        double peso = Double.parseDouble(txtPeso.getText());
+        double largo = Double.parseDouble(txtLargo.getText());
+        double alto = Double.parseDouble(txtAlto.getText());
+        double ancho = Double.parseDouble(txtAncho.getText());
+        int idRuta = rutaSeleccionada.getIdRuta();
+        String fecha_envio = LocalDate.now().toString();
+        String estado = "Sin Asignar";
+        int idTrabajador = ((Trabajador) cboTrabajador.getSelectedItem()).getIdTrabajador();
+        int idMetodoPago = 1;
+        if (rbnEfectivo.isSelected()) {
+            idMetodoPago = 1;
+        } else if (rbnTarjeta.isSelected()) {
+            idMetodoPago = 2;
+        } else if (rbnYape.isSelected()) {
+            idMetodoPago = 3;
+        }
+        // VALIDACIONES
         ControladorEncomienda controlador = new ControladorEncomienda();
-        // controlador.registrarEncomienda();
+        controlador.registrarEncomienda(
+            idRemitente,
+            idDestinatario,
+            idRuta,
+            descripcion,
+            peso,
+            largo,
+            alto,
+            ancho,
+            fleteFinal,
+            fecha_envio,
+            estado,
+            idTrabajador,
+            idMetodoPago
+        );
        
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -613,26 +652,21 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             return;
         }
         
-        txtPeso.setEnabled(true);
-        txtLargo.setEnabled(true);
-        txtAncho.setEnabled(true);
-        txtAlto.setEnabled(true);
+        txtPeso.setText(""+ tipo.getMaxPeso());
+        txtLargo.setText(""+ tipo.getMaxLargo());
+        txtAncho.setText(""+ tipo.getMaxAncho());
+        txtAlto.setText(""+ tipo.getMaxAlto());
         
-        txtPeso.setText("");
-        txtLargo.setText("");
-        txtAncho.setText("");
-        txtAlto.setText("");
+        txtPeso.setEnabled(false);
+        txtLargo.setEnabled(false);
+        txtAncho.setEnabled(false);
+        txtAlto.setEnabled(false);
         
         JOptionPane.showMessageDialog(this, "Límites del tipo seleccionado:\n" +
         "- Peso máximo: " + tipo.getMaxPeso() + " kg\n" +
         "- Largo: " + tipo.getMaxLargo() + " cm\n" +
         "- Ancho: " + tipo.getMaxAncho() + " cm\n" +
         "- Alto: " + tipo.getMaxAlto() + " cm\n ");
-        
-        setPlaceholder(txtPeso,"Máx:  "+ tipo.getMaxPeso() + "kg");
-        setPlaceholder(txtLargo,"Máx:  "+ tipo.getMaxLargo() + "cm");
-        setPlaceholder(txtAncho,"Máx:  "+ tipo.getMaxAncho()+ "cm");
-        setPlaceholder(txtAlto,"Máx:  "+ tipo.getMaxAlto()+ "cm");
         
         calcularFlete();
         txtFlete.setEnabled(false);
@@ -695,6 +729,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             txtNombreRemitente.setText(cliente.getNombres() +" "+ cliente.getApellido_paterno());
             txtDNIRemitente.setText(cliente.getDni());
             txtTelefonoRemitente.setText(cliente.getTelefono());
+            idRemitente = cliente.getIdcliente();
         }
     }//GEN-LAST:event_btnBuscarRemitenteActionPerformed
 
@@ -711,6 +746,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             txtNombreDestinatario.setText(cliente.getNombres() +" "+ cliente.getApellido_paterno());
             txtDNIDestinatario.setText(cliente.getDni());
             txtTelefonoDestinatario.setText(cliente.getTelefono());
+            idDestinatario = cliente.getIdcliente();
         }
     }//GEN-LAST:event_btnBuscarDestinatarioActionPerformed
 
@@ -724,29 +760,14 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         modulo.setVisible(true);
     }//GEN-LAST:event_btnRegistrarDestinatarioActionPerformed
 
-    private void setPlaceholder(JTextField txt, String placeholder) {
-    txt.setText(placeholder);
-    txt.setForeground(Color.GRAY);
+    private void cboTrabajadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTrabajadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboTrabajadorActionPerformed
 
-    txt.addFocusListener(new java.awt.event.FocusAdapter() {
-        @Override
-        public void focusGained(java.awt.event.FocusEvent e) {
-            if (txt.getText().equals(placeholder)) {
-                txt.setText("");
-                txt.setForeground(Color.BLACK);
-            }
-        }
-
-        @Override
-        public void focusLost(java.awt.event.FocusEvent e) {
-            if (txt.getText().trim().isEmpty()) {
-                txt.setText(placeholder);
-                txt.setForeground(Color.GRAY);
-            }
-        }
-    });
-}
-    
+    private void rbnEfectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbnEfectivoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbnEfectivoActionPerformed
+   
     public void limpiarCampos(){
         
     }
