@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class ModuloRuta extends javax.swing.JFrame {
+    private Integer idRutaSeleccionada = null;
     
     private int idRutaActual = -1;
     private int IdParadaActual = -1;
@@ -23,8 +24,17 @@ public class ModuloRuta extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         controlador = new ControladorRuta();
-        cargarTablaRutas();
         recargarCboAgencia = true;
+        cargarTablaRutas();
+        tabRutas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int fila = tabRutas.getSelectedRow();
+                if (fila >= 0) {
+                    int idRuta = Integer.parseInt(tabRutas.getValueAt(fila, 0).toString());
+                    cargarParadas(idRuta);
+                }
+            }
+        });
     }
 
     /**
@@ -264,6 +274,11 @@ public class ModuloRuta extends javax.swing.JFrame {
         jPanel1.add(cboAgencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 240, 30));
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 90, 30));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -283,9 +298,19 @@ public class ModuloRuta extends javax.swing.JFrame {
         jPanel1.add(btnEliminarParada, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 220, 120, 30));
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 290, 90, 30));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 80, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -333,6 +358,28 @@ public class ModuloRuta extends javax.swing.JFrame {
             double costoBase = Double.parseDouble(txtCostoBase.getText());
             String descripcion = txtDescripcion.getText();
             
+            try {
+                distanciaKm = Double.parseDouble(txtDistancia.getText());
+                tiempoEstimadoHoras = Double.parseDouble(txtTiempoEstimado.getText());
+                costoBase = Double.parseDouble(txtCostoBase.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Los campos de distancia, tiempo y costo deben ser numéricos.",
+                        "Formato incorrecto",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+            
+            // VALIDAR QUE LOS NUMÉRICOS SEAN POSITIVOS
+            if (distanciaKm <= 0 || tiempoEstimadoHoras <= 0 || costoBase <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Los valores de distancia, tiempo y costo deben ser mayores que 0.",
+                        "Valor inválido",JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+            
             DefaultTableModel modelo = (DefaultTableModel) tabParadas.getModel();
             List<ParadaRuta> paradas = new ArrayList<>();
             
@@ -359,34 +406,13 @@ public class ModuloRuta extends javax.swing.JFrame {
                     paradas
             );
 
-            try {
-                distanciaKm = Double.parseDouble(txtDistancia.getText());
-                tiempoEstimadoHoras = Double.parseDouble(txtTiempoEstimado.getText());
-                costoBase = Double.parseDouble(txtCostoBase.getText());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "Los campos de distancia, tiempo y costo deben ser numéricos.",
-                        "Formato incorrecto",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-
-            // VALIDAR QUE LOS NUMÉRICOS SEAN POSITIVOS
-            if (distanciaKm <= 0 || tiempoEstimadoHoras <= 0 || costoBase <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Los valores de distancia, tiempo y costo deben ser mayores que 0.",
-                        "Valor inválido",JOptionPane.WARNING_MESSAGE
-                );
-                return;
-            }
-
             if (controlador.registrarRuta(ruta, paradas)) {
                 JOptionPane.showMessageDialog(this, "Registro correcto");
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo registrar la ruta.");
             }
-
+            cargarTablaRutas();
+            limpiarCampos();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
         }
@@ -437,6 +463,15 @@ public class ModuloRuta extends javax.swing.JFrame {
         recargarCboAgencia = false;
     }//GEN-LAST:event_cboAgenciaFocusGained
 
+    private void limpiarCampos(){
+        txtDescripcion.setText("");
+        txtCostoBase.setText("");
+        txtTiempoEstimado.setText("");
+        txtDistancia.setText("");
+        cboAgencia.setSelectedIndex(0);
+        txtDescripcion.requestFocus();
+    }
+    
     private void btnAgregarParadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarParadaActionPerformed
         if(!modoEdicion) {
             DefaultTableModel modelo = (DefaultTableModel) tabParadas.getModel();
@@ -450,6 +485,55 @@ public class ModuloRuta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarParadaActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int fila = tabRutas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una ruta para eliminar");
+            return;
+        }
+        
+        //Confirmamos antes de eliminar
+        int confirmar = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar esta ruta?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        
+        if (confirmar != JOptionPane.YES_OPTION) {
+            return;
+        }
+        //Obtenemos el ID de ruta
+        int idRuta = Integer.parseInt(tabRutas.getValueAt(fila, 0).toString());
+        
+        ControladorRuta ctrl = new ControladorRuta();
+        boolean eliminado = ctrl.eliminarRuta(idRuta);
+        
+        if (eliminado) {
+            JOptionPane.showMessageDialog(this, "Ruta eliminada correctamente");
+            cargarTablaRutas();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al eliminar una ruta");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    
+    
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int fila = tabRutas.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un vehículo");
+            return;
+        }
+
+        idRutaSeleccionada = Integer.parseInt(tabRutas.getValueAt(fila, 0).toString());
+
+        txtDescripcion.setText(tabRutas.getValueAt(fila, 1).toString());
+        txtCostoBase.setText(tabRutas.getValueAt(fila, 2).toString());
+        txtTiempoEstimado.setText(tabRutas.getValueAt(fila, 3).toString());
+        txtDistancia.setText(tabRutas.getValueAt(fila, 4).toString());
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
     private void llenarCboAgencias(List<Agencia> agencias) {
         if(agencias != null) {
             for(Agencia a : agencias) {
@@ -459,9 +543,39 @@ public class ModuloRuta extends javax.swing.JFrame {
     }
     
     public void cargarTablaRutas() {
-        //
+        ControladorRuta ctrl = new ControladorRuta();
+        List<Ruta> lista = ctrl.listarRutas();
+        DefaultTableModel modelo = (DefaultTableModel) tabRutas.getModel();
+        modelo.setRowCount(0);
+        
+        for (Ruta r : lista) {
+            modelo.addRow(new Object[]{
+                r.getIdRuta(),
+                r.getDescripcion(),
+                r.getCostoBase(),
+                r.getTiempoEstimadoHoras(),
+                r.getDistanciaKm()
+         });             
+        }
     }
     
+    public void cargarParadas(int idRuta){
+        ControladorParada ctrl = new ControladorParada();
+        List<ParadaRuta> paradas = ctrl.listarParadaPorRuta(idRuta);
+        
+        DefaultTableModel model = (DefaultTableModel)tabParadas.getModel();
+        model.setRowCount(0);
+        
+        for (ParadaRuta p : paradas) {
+            model.addRow(new Object[] {
+                p.getOrden(),
+                p.getNombreAgencia(),
+                p.getIdAgencia()
+            });
+        }
+    }
+   
+     
     /**
      * @param args the command line arguments
      */

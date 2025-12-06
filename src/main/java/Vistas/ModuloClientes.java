@@ -78,6 +78,11 @@ public class ModuloClientes extends javax.swing.JFrame {
                 txtNombresActionPerformed(evt);
             }
         });
+        txtNombres.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombresKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 190, -1));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
@@ -129,6 +134,11 @@ public class ModuloClientes extends javax.swing.JFrame {
         txtApellidoPaterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtApellidoPaternoActionPerformed(evt);
+            }
+        });
+        txtApellidoPaterno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoPaternoKeyTyped(evt);
             }
         });
         jPanel1.add(txtApellidoPaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 190, -1));
@@ -191,6 +201,11 @@ public class ModuloClientes extends javax.swing.JFrame {
         txtApellidoMaterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtApellidoMaternoActionPerformed(evt);
+            }
+        });
+        txtApellidoMaterno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoMaternoKeyTyped(evt);
             }
         });
         jPanel1.add(txtApellidoMaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 190, -1));
@@ -457,6 +472,33 @@ public class ModuloClientes extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txttelefonoKeyTyped
+
+    private void txtNombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresKeyTyped
+        char c = evt.getKeyChar();
+        
+        //Solo se permiten letras y espacios
+        if (!Character.isLetter(c) && c!= ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombresKeyTyped
+
+    private void txtApellidoPaternoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoPaternoKeyTyped
+        char c = evt.getKeyChar();
+        
+        //Solo se permiten letras y espacios
+        if (!Character.isLetter(c) && c!= ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtApellidoPaternoKeyTyped
+
+    private void txtApellidoMaternoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoMaternoKeyTyped
+       char c = evt.getKeyChar();
+        
+        //Solo se permiten letras y espacios
+        if (!Character.isLetter(c) && c!= ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtApellidoMaternoKeyTyped
 
     public void limpiarCampos(){
         txtNombres.setText("");

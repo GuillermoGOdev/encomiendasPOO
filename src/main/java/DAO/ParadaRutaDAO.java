@@ -141,6 +141,53 @@ public class ParadaRutaDAO{
         return lista;
     }
     
+    public List<ParadaRuta> listarPorRuta(int idRuta) {
+        String sql = """
+                 SELECT
+                    PR.*, A.nombre
+                 FROM 
+                    ParadaRuta PR 
+                    INNER JOIN Agencia A ON A.idAgencia = PR.idAgencia
+                 WHERE PR.idRuta = ?
+                 ORDER BY PR.orden
+                 """;
+
+        List<ParadaRuta> lista = new ArrayList<>();
+
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idRuta);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lista.add(mapear(rs));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error en listarPorRuta(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al listar paradas por ruta.", e);
+        }
+        return lista;
+    }
+    
+    
+    public boolean eliminarParadasPorRuta(int idRuta) {
+        String sql = "DELETE FROM ParadaRuta WHERE idRuta = ?";
+
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idRuta);
+            ps.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("Error al eliminar paradas: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    
     // --- Método para mapear un ResultSet a un objeto ParadaRuta ---
     private ParadaRuta mapear(ResultSet rs) throws Exception {
         ParadaRuta parada = new ParadaRuta();

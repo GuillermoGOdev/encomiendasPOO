@@ -36,23 +36,16 @@ public class ControladorRuta {
         }
         return paradaDAO.registrar(paradas);
     }
-    /*
-    // LISTAR RUTAS
-    public List<Trabajador> listarTrabajadores() {
-        return trabajadorDAO.listar();
+    public List<Ruta> listarRutas() {
+        return rutaDAO.listar();
+    }
+//    public boolean eliminarRuta(int id){
+//        return rutaDAO.eliminar(id);
+//    }
+     public boolean actualizarRuta(Ruta r){
+        return rutaDAO.modificar(r);
     }
     
-    public boolean eliminarTrabajador(int id){
-        return trabajadorDAO.eliminar(id);
-    }
-    
-    public Trabajador obtenerID(int id){
-        return trabajadorDAO.obtenerPorId(id);
-    }
-    public boolean actualizarTrabajador(Trabajador t){
-        return trabajadorDAO.actualizar(t);
-    }
-*/
     
     // Jala la lista de departamentos de la BD
     public List<Agencia> obtenerAgencias() {
@@ -63,4 +56,23 @@ public class ControladorRuta {
             return Collections.emptyList(); // Devuelve lista vacía para evitar NPE en la vista
         }
     }
+    
+    public List<ParadaRuta> listarParadaRutas (int idRuta){
+        return paradaDAO.listarPorRuta(idRuta);
+    }
+    
+    public boolean eliminarRuta(int idRuta) {
+    try {
+        // 1. Eliminar paradas primero
+        ControladorParada ctrl = new ControladorParada();
+        ctrl.eliminarParadasPorRuta(idRuta);
+
+        // 2. Ahora sí eliminar la ruta
+        return rutaDAO.eliminar(idRuta);
+
+    } catch (Exception e) {
+        System.out.println("Error al eliminar ruta: " + e.getMessage());
+        return false;
+    }
+}
 }
