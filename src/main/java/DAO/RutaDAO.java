@@ -115,6 +115,31 @@ public class RutaDAO {
         return lista;
     }
     
+    public Ruta obtenerRutaPorAgencias(int idAgenciaOrigen, int idAgenciaDestino) {
+        String sql = """
+                     SELECT R.id_ruta, R.descripcion, R.costo_base, R.tiempo_estimado_horas, R.distancia_km 
+                     FROM Ruta AS R 
+                     INNER JOIN ParadaRuta AS PR_Origen ON R.id_ruta = PR_Origen.idRuta 
+                     INNER JOIN ParadaRuta AS PR_Destino ON R.id_ruta = PR_Destino.idRuta 
+                     WHERE PR_Origen.idAgencia = ? AND PR_Destino.idAgencia = ? AND PR_Origen.orden < PR_Destino.orden
+                     LIMIT 1
+                     """;
+
+        try(Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idAgenciaOrigen);
+            ps.setInt(2, idAgenciaDestino);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return mapear(rs);
+            }    
+        } catch(Exception e) {
+            System.err.println("Error en RutaDAO.obtenerRutaPorAgencias(): " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al buscar la Ruta por Agencias en la base de datos.", e);
+        }
+        return null;
+    }
+    
     // --- Método para mapear un ResultSet a un objeto Ruta ---
     private Ruta mapear(ResultSet rs) throws Exception {
         Ruta ruta = new Ruta();
