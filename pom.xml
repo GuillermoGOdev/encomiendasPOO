@@ -23,6 +23,7 @@
             <version>RELEASE90</version>
             <type>jar</type>
         </dependency>
+        <!-- JCalendar -->
         <dependency>
             <groupId>com.toedter</groupId>
             <artifactId>jcalendar</artifactId>
