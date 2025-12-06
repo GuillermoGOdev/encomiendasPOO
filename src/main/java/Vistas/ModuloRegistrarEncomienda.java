@@ -2,6 +2,7 @@
 package Vistas;
 import Controladores.*;
 import DTO.Agencia;
+import DTO.Cliente;
 import DTO.MetodoPago;
 import DTO.TipoPaquete;
 import DTO.Trabajador;
@@ -21,6 +22,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         desactivarCamposDimensiones();
         cargarTrabajadores();
         cargarMetodosPago();
+        cargarClientes();
     }
 
     
@@ -39,7 +41,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         txtNombreRemitente = new javax.swing.JTextField();
         txtDNIRemitente = new javax.swing.JTextField();
         txtTelefonoRemitente = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboCliente = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taDescripcionEncomienda = new javax.swing.JTextArea();
@@ -124,7 +126,11 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Teléfono");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboClienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -133,7 +139,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -150,7 +156,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cboCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -552,6 +558,15 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         setPlaceholder(txtAlto,"Máx:  "+ tipo.getMaxAlto()+ "cm");
     }//GEN-LAST:event_cboTipoEncomiendaActionPerformed
 
+    private void cboClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboClienteActionPerformed
+        if (cboCliente.getSelectedIndex() <= 0) return;
+        
+        Cliente c = (Cliente) cboCliente.getSelectedItem();
+        txtNombreRemitente.setText(c.getNombres());
+        txtDNIRemitente.setText(c.getDni());
+        txtTelefonoRemitente.setText(c.getTelefono());
+    }//GEN-LAST:event_cboClienteActionPerformed
+
     private void setPlaceholder(JTextField txt, String placeholder) {
     txt.setText(placeholder);
     txt.setForeground(Color.GRAY);
@@ -589,6 +604,17 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         for (Agencia a : lista) {
             cboAgenciaOrigen.addItem(a);
             cboAgenciaDestino.addItem(a);
+        }
+    }
+    
+    private void cargarClientes(){
+        cboCliente.removeAllItems();
+        
+        ControladorCliente ctrl = new ControladorCliente();
+        List<Cliente> lista = ctrl.listarClientes();
+        
+        for (Cliente c : lista) {
+            cboCliente.addItem(c);
         }
     }
     
@@ -630,6 +656,14 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         rbnEfectivo.setText(lista.get(0).getNombre());
         rbnTarjeta.setText(lista.get(1).getNombre());
         rbnYape.setText(lista.get(2).getNombre());
+    }
+   
+    public String getTipoPaquete(){
+        return cboTipoEncomienda.getSelectedItem().toString();
+    }
+    
+    public double getPeso(){
+        return Double.parseDouble(txtPeso.getText());
     }
     
     private void desactivarCamposDimensiones(){
@@ -678,9 +712,9 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JComboBox<Agencia> cboAgenciaDestino;
     private javax.swing.JComboBox<Agencia> cboAgenciaOrigen;
+    private javax.swing.JComboBox<Cliente> cboCliente;
     private javax.swing.JComboBox<TipoPaquete> cboTipoEncomienda;
     private javax.swing.JComboBox<Trabajador> cboTrabajador;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
