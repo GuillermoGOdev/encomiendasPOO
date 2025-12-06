@@ -87,7 +87,7 @@
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace pref="20" max="32767" attributes="0"/>
+                          <EmptySpace pref="19" max="32767" attributes="0"/>
                           <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       </Group>
@@ -170,10 +170,9 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="cboCliente" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -187,8 +186,15 @@
                                   <Component id="txtTelefonoRemitente" min="-2" pref="269" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="txtBuscarRemitente" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                              <Component id="btnBuscarRemitente" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnRegistrarRemitente" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="27" max="32767" attributes="0"/>
+                      <EmptySpace pref="29" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -196,7 +202,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cboCliente" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtBuscarRemitente" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBuscarRemitente" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnRegistrarRemitente" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace pref="36" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -257,18 +267,23 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtTelefonoRemitente">
             </Component>
-            <Component class="javax.swing.JComboBox" name="cboCliente">
+            <Component class="javax.swing.JTextField" name="txtBuscarRemitente">
+            </Component>
+            <Component class="javax.swing.JButton" name="btnBuscarRemitente">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="Buscar"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboClienteActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarRemitenteActionPerformed"/>
               </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Cliente&gt;"/>
-              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnRegistrarRemitente">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Registrar nuevo"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarRemitenteActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -305,7 +320,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="txtValorDeclarado" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="txtFlete" min="-2" pref="100" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
@@ -368,7 +383,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtValorDeclarado" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtFlete" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   </Group>
@@ -462,10 +477,13 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Valor declarado (S/): "/>
+                <Property name="text" type="java.lang.String" value="Flete (S/): "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtValorDeclarado">
+            <Component class="javax.swing.JTextField" name="txtFlete">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtFleteActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel11">
               <Properties>
@@ -517,24 +535,41 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="txtBuscarDestinatario" min="-2" pref="162" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnBuscarDestinatario" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnRegistrarDestinatario" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="txtNombreDestinatario" alignment="0" pref="269" max="32767" attributes="0"/>
+                                  <Component id="txtDNIDestinatario" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtTelefonoDestinatario" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtNombreDestinatario" alignment="0" pref="269" max="32767" attributes="0"/>
-                          <Component id="txtDNIDestinatario" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtTelefonoDestinatario" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="68" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtBuscarDestinatario" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBuscarDestinatario" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnRegistrarDestinatario" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtNombreDestinatario" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -589,10 +624,31 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNombreDestinatario">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNombreDestinatarioActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDNIDestinatario">
             </Component>
             <Component class="javax.swing.JTextField" name="txtTelefonoDestinatario">
+            </Component>
+            <Component class="javax.swing.JButton" name="btnRegistrarDestinatario">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Registrar nuevo"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarDestinatarioActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnBuscarDestinatario">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Buscar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarDestinatarioActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtBuscarDestinatario">
             </Component>
           </SubComponents>
         </Container>
@@ -713,6 +769,9 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboAgenciaOrigenActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;&gt;()"/>
                 <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="ModuloRegistrarEncomienda_cboAgenciaOrigen"/>
@@ -725,6 +784,9 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboAgenciaDestinoActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;&gt;()"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Agencia&gt;"/>

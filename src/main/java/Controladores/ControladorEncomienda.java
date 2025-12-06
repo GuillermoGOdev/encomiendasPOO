@@ -5,6 +5,7 @@ import DAO.ClienteDAO;
 import DAO.EncomiendaDAO;
 import DAO.RutaDAO;
 import DTO.Encomienda;
+import DTO.Ruta;
 import DTO.TipoPaquete;
 import java.util.HashMap;
 import Vistas.ModuloRegistrarEncomienda;
@@ -55,6 +56,23 @@ public class ControladorEncomienda {
             String ancho,
             String costo,
             int idTrabajador
+            
+            /*
+            id_encomienda int AI PK 
+id_cliente_remitente int 
+id_cliente_destinatario int 
+id_ruta int 
+descripcion varchar(255) 
+peso_kg decimal(8,2) 
+largo decimal(18,2) 
+alto decimal(18,2) 
+ancho decimal(8,2) 
+costo_envio decimal(10,2) 
+fecha_envio date 
+estado varchar(50) 
+idtrabajador int 
+idMetodoPago
+            */
     ) {
 
         // VALIDACIONES
@@ -112,6 +130,8 @@ public class ControladorEncomienda {
         }
     }
 
-    
+    public Ruta obtenerRuta(int origen, int destino) {
+        return rutaDAO.obtenerRutaPorAgencias(origen, destino);
+    }
     
 }
