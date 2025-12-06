@@ -56,5 +56,11 @@ public class Cliente extends Persona {
         this.Estado = Estado;
     }
 
+    @Override
+    public String toString() {
+        return this.getDni() +" - "+getNombres()+" "+getApellido_paterno();
+    }
+
+    
     
 }

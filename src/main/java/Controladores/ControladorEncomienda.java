@@ -5,19 +5,43 @@ import DAO.ClienteDAO;
 import DAO.EncomiendaDAO;
 import DAO.RutaDAO;
 import DTO.Encomienda;
+import DTO.TipoPaquete;
+import java.util.HashMap;
+import Vistas.ModuloRegistrarEncomienda;
 
 
 public class ControladorEncomienda {
     private EncomiendaDAO dao;
     private final ClienteDAO clienteDAO;
     private final RutaDAO rutaDAO;
+    private HashMap<String, Object> tarifas = new HashMap<>();
+    private ModuloRegistrarEncomienda vista;
+    private TipoPaquete tipoPaquete;
+
 
     public ControladorEncomienda() {
         this.dao = new EncomiendaDAO();
         this.clienteDAO = new ClienteDAO();
         this.rutaDAO = new RutaDAO();
+        this.vista = new ModuloRegistrarEncomienda();
+//        this.tipoPaquete = new TipoPaquete(nombre, 0, 0, 0, 0)
         
     }
+    
+//    private void cargarTarifas() {
+//        tarifas.put("Sobre", new TarifaPaquete("Sobre", 4, 0));
+//        tarifas.put("Caja paquete XXS", new TarifaPaquete("Caja paquete XXS", 5, 0.3));
+//        tarifas.put("Caja paquete XS", new TarifaPaquete("Caja paquete XS", 6, 0.5));
+//        tarifas.put("Caja paquete S", new TarifaPaquete("Caja paquete S", 8, 1));
+//        tarifas.put("Caja paquete M", new TarifaPaquete("Caja paquete M", 12, 1.2));
+//        tarifas.put("Caja paquete L", new TarifaPaquete("Caja paquete L", 18, 1.5));
+//    }
+    
+//    private double calcularCosto(){
+//        TarifaPaquete tarifa = tarifas.get(TipoPaquete);
+//        return tarifa.getCostoBase() + tarifa.getTarifaPorKilo() * pesoM
+//    }
+    
     
     // MÉTODO PRINCIPAL: REGISTRAR ENCOMIENDA
     public String registrarEncomienda(
@@ -88,4 +112,6 @@ public class ControladorEncomienda {
         }
     }
 
+    
+    
 }
