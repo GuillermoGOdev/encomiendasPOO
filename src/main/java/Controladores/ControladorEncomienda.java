@@ -116,7 +116,7 @@ idMetodoPago
         en.setAlto(altoD);
         en.setAncho(anchoD);
         en.setCostoEnvio(costoD);
-        en.setFecha_Envio(new java.util.Date());
+//        en.setFecha_Envio(new java.util.Date());
         en.setEstado("En tránsito");
         en.setIdTrabajador(idTrabajador);
 
@@ -132,6 +132,10 @@ idMetodoPago
 
     public Ruta obtenerRuta(int origen, int destino) {
         return rutaDAO.obtenerRutaPorAgencias(origen, destino);
+    }
+    
+    public Encomienda buscarPorId(int id) {
+        return dao.buscar(id);
     }
     
 }
