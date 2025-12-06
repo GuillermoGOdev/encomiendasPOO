@@ -63,7 +63,6 @@ public class Persona {
     public void setIdpersona(int idpersona) {
         this.idpersona = idpersona;
     }
-                   
 
     public String getNombres() {
         return nombres;
@@ -96,5 +95,10 @@ public class Persona {
     public int getIdpersona() {
         return idpersona;
     }
-    
+
+    @Override
+    public String toString() {
+        return nombres + apellido_paterno + apellido_materno;  // Esto es lo que se mostrará en el combo
+    }
+
 }

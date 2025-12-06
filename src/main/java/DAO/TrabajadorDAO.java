@@ -1,4 +1,3 @@
-
 package DAO;
 
 import Conexion.ConexionSQL;
@@ -8,13 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class TrabajadorDAO {
+
     // REGISTRAR TRABAJADOR (requiere que ya exista Persona)
     public boolean registrar(Trabajador t) {
         String sql = "INSERT INTO Trabajador (idpersona, sueldo, estado, idcargo) "
-                   + "VALUES (?, ?, ?, ?)";
-        
+                + "VALUES (?, ?, ?, ?)";
+
         try (Connection con = ConexionSQL.conectar()) {
 
             PreparedStatement ps = con.prepareStatement(sql);
@@ -28,7 +29,7 @@ public class TrabajadorDAO {
         } catch (Exception e) {
             System.err.println("Error registrando Cliente: " + e.getMessage());
             return false;
-        }   
+        }
     }
 
     // OBTENER POR ID
@@ -41,13 +42,14 @@ public class TrabajadorDAO {
 
         Trabajador trab = null;
 
-        try (Connection con = ConexionSQL.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) trab = mapear(rs);
+            if (rs.next()) {
+                trab = mapear(rs);
+            }
 
         } catch (Exception e) {
             System.err.println("Error obteniendo Trabajador: " + e.getMessage());
@@ -66,11 +68,11 @@ public class TrabajadorDAO {
                  ON p.idpersona = t.idpersona ORDER BY t.idtrabajador
                          """;
 
-        try (Connection con = ConexionSQL.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) lista.add(mapear(rs));
+            while (rs.next()) {
+                lista.add(mapear(rs));
+            }
 
         } catch (Exception e) {
             System.err.println("Error listando trabajadores: " + e.getMessage());
@@ -82,12 +84,11 @@ public class TrabajadorDAO {
     // ACTUALIZAR
     public boolean actualizar(Trabajador t) {
         String sql = "UPDATE Trabajador SET sueldo=?, estado=?, idcargo=? "
-                   + "WHERE idtrabajador=?";
+                + "WHERE idtrabajador=?";
 
         boolean ok = false;
 
-        try (Connection con = ConexionSQL.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             con.setAutoCommit(false);
 
@@ -99,7 +100,9 @@ public class TrabajadorDAO {
             if (ps.executeUpdate() > 0) {
                 con.commit();
                 ok = true;
-            } else con.rollback();
+            } else {
+                con.rollback();
+            }
 
         } catch (Exception e) {
             System.err.println("Error actualizando Trabajador: " + e.getMessage());
@@ -113,8 +116,7 @@ public class TrabajadorDAO {
         String sql = "DELETE FROM Trabajador WHERE idtrabajador=?";
         boolean ok = false;
 
-        try (Connection con = ConexionSQL.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             con.setAutoCommit(false);
             ps.setInt(1, id);
@@ -122,7 +124,9 @@ public class TrabajadorDAO {
             if (ps.executeUpdate() > 0) {
                 con.commit();
                 ok = true;
-            } else con.rollback();
+            } else {
+                con.rollback();
+            }
 
         } catch (Exception e) {
             System.err.println("Error eliminando Trabajador: " + e.getMessage());
@@ -134,18 +138,46 @@ public class TrabajadorDAO {
     // MAPEO COMPLETO (Persona + Trabajador)
     private Trabajador mapear(ResultSet rs) throws SQLException {
         return new Trabajador(
-            rs.getInt("idpersona"),
-            rs.getString("nombres"),
-            rs.getString("apellido_paterno"),
-            rs.getString("apellido_materno"),
-            rs.getString("dni"),
-            rs.getString("telefono"),
-            rs.getString("email"),
-            rs.getString("direccion"),
-            rs.getInt("idtrabajador"),
-            rs.getDouble("sueldo"),
-            rs.getString("estado"),
-            rs.getInt("idcargo")
+                rs.getInt("idpersona"),
+                rs.getString("nombres"),
+                rs.getString("apellido_paterno"),
+                rs.getString("apellido_materno"),
+                rs.getString("dni"),
+                rs.getString("telefono"),
+                rs.getString("email"),
+                rs.getString("direccion"),
+                rs.getInt("idtrabajador"),
+                rs.getDouble("sueldo"),
+                rs.getString("estado"),
+                rs.getInt("idcargo")
         );
+    }
+
+    public List<Trabajador> listarConductor() {
+        List<Trabajador> lista = new ArrayList<>();
+        String sql = "SELECT T1.nombres, T1.apellido_paterno,T1.apellido_materno,\n"
+                + "       T0.idtrabajador\n"
+                + "FROM luisgonz_poo_guillermo.Trabajador T0 \n"
+                + "INNER JOIN Persona T1\n"
+                + "    ON T0.idpersona = T1.idpersona\n"
+                + "WHERE T0.idcargo = 7;";
+
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Trabajador v = new Trabajador();
+                v.setNombres(rs.getString("nombres"));
+                v.setApellido_paterno(rs.getString("apellido_paterno"));
+                v.setApellido_materno(rs.getString("apellido_materno"));
+                v.setIdTrabajador(rs.getInt("idtrabajador"));
+                lista.add(v);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al cargar conductores en combo: " + e.getMessage());
+        }
+
+        return lista;
     }
 }
