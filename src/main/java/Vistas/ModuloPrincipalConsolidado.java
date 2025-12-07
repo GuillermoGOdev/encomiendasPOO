@@ -7,6 +7,7 @@ package Vistas;
 import DAO.DespachoDAO;
 import DAO.VehiculoDAO;
 import DTO.Vehiculo;
+import Util.Design_JTable;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
 
     VehiculoDAO vehiculo = new VehiculoDAO();
+    Design_JTable design_table = new Design_JTable();
 
     public ModuloPrincipalConsolidado() {
         initComponents();
@@ -66,6 +68,11 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         // Llamar al DAO
         DespachoDAO dao = new DespachoDAO();
         tablaDespacho.setModel(dao.listarDespacho(placa, fechaSQL));
+        design_table.ocultarColumnas(tablaDespacho, 0);
+        design_table.ocultarColumnas(tablaDespacho, 1);
+        design_table.ocultarColumnas(tablaDespacho, 11);
+        design_table.ocultarColumnas(tablaDespacho, 4);
+        design_table.ocultarColumnas(tablaDespacho, 5);
     }
 
     @SuppressWarnings("unchecked")
@@ -87,6 +94,7 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         btnAgregarEncomiendas = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,17 +108,17 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Vehiculo:");
         jLabel12.setToolTipText("DNI");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 70, 20));
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, 70, 20));
 
         cboPlaca.setBorder(null);
         cboPlaca.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel2.add(cboPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, 190, -1));
+        jPanel2.add(cboPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, 190, 30));
 
         jLabel15.setBackground(new java.awt.Color(255, 255, 255));
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Fecha de Salida:");
         jLabel15.setToolTipText("DNI");
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 240, 20));
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 240, 20));
 
         tablaDespacho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,18 +133,18 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaDespacho);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 670, 250));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 920, 310));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Módulo Despacho");
         jLabel5.setToolTipText("DNI");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 22, 230, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 230, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/camion_1.png"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 40, 30));
-        jPanel2.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 190, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 40, 30));
+        jPanel2.add(jdcFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 190, 30));
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -144,10 +152,10 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 90, 100, 30));
+        jPanel2.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, 100, 30));
 
         jButton1.setText("Editar");
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, -1, -1));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
 
         btnAgregarEncomiendas.setText("Agregar Encomiendas");
         btnAgregarEncomiendas.addActionListener(new java.awt.event.ActionListener() {
@@ -155,7 +163,7 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
                 btnAgregarEncomiendasActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAgregarEncomiendas, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, -1, -1));
+        jPanel2.add(btnAgregarEncomiendas, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 220, -1, -1));
 
         jButton3.setText("Nuevo");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -163,10 +171,18 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, -1));
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
 
         jButton4.setText("Eliminar");
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, -1, -1));
+        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, -1, -1));
+
+        jButton2.setText("Actualizar Datos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 220, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -174,18 +190,18 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 694, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -215,14 +231,25 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         int idRuta = Integer.parseInt(tablaDespacho.getValueAt(fila, 1).toString());
         String ruta = tablaDespacho.getValueAt(fila, 2).toString();
         String placa = tablaDespacho.getValueAt(fila, 3).toString();
-        String conductor = tablaDespacho.getValueAt(fila, 4).toString();
-        Date fechaSalida = (Date) tablaDespacho.getValueAt(fila, 5); // si usas java.util.Date o java.sql.Date
+        double capacidadKg = Double.parseDouble(tablaDespacho.getValueAt(fila, 4).toString());
+        double capacidadVolumen = Double.parseDouble(tablaDespacho.getValueAt(fila, 5).toString());
+        double kg_comprometido = Double.parseDouble(tablaDespacho.getValueAt(fila, 6).toString());
+        double volumenComprometido = Double.parseDouble(tablaDespacho.getValueAt(fila, 7).toString());
+        int cantpaq = Integer.parseInt(tablaDespacho.getValueAt(fila, 8).toString());
+        String conductor = tablaDespacho.getValueAt(fila, 9).toString();
+        Date fechaSalida = (Date) tablaDespacho.getValueAt(fila, 10); // si usas java.util.Date o java.sql.Date
 
         // Crear ventana y enviar datos
         ModuloAsignarEncomiendas ventana = new ModuloAsignarEncomiendas();
-        ventana.setDatos(idConsolidado, idRuta, ruta, placa, conductor, fechaSalida);
+        ventana.setDatos(idConsolidado, idRuta, ruta, placa, capacidadKg, capacidadVolumen,
+                kg_comprometido, volumenComprometido, cantpaq,
+                conductor, fechaSalida);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnAgregarEncomiendasActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        LlenarTabla();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -264,6 +291,7 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JComboBox<Vehiculo> cboPlaca;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
