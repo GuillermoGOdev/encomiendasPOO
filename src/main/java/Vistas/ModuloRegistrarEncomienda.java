@@ -20,7 +20,6 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private Ruta rutaSeleccionada;
     private double fleteInicial;
     private double fleteFinal = -1;
-    private boolean datosEncomiendaCompletos = false;
     private int idRemitente;
     private int idDestinatario;
     
@@ -31,6 +30,10 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         desactivarCamposDimensiones();
         cargarTrabajadores();
         cargarMetodosPago();
+        txtBuscarRemitente.setText("DNI");
+        txtBuscarRemitente.setForeground(new java.awt.Color(153,153,153));
+        txtBuscarDestinatario.setText("DNI");
+        txtBuscarDestinatario.setForeground(new java.awt.Color(153,153,153));
     }
 
     
@@ -139,6 +142,20 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Teléfono");
 
+        txtBuscarRemitente.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBuscarRemitenteFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBuscarRemitenteFocusLost(evt);
+            }
+        });
+        txtBuscarRemitente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarRemitenteKeyTyped(evt);
+            }
+        });
+
         btnBuscarRemitente.setText("Buscar");
         btnBuscarRemitente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,6 +260,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Tipo:");
 
+        cboTipoEncomienda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         cboTipoEncomienda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboTipoEncomiendaActionPerformed(evt);
@@ -353,6 +371,20 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             }
         });
 
+        txtBuscarDestinatario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBuscarDestinatarioFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBuscarDestinatarioFocusLost(evt);
+            }
+        });
+        txtBuscarDestinatario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarDestinatarioKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -373,10 +405,10 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
                             .addComponent(jLabel14))
                         .addGap(63, 63, 63)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNombreDestinatario, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                            .addComponent(txtNombreDestinatario)
                             .addComponent(txtDNIDestinatario)
-                            .addComponent(txtTelefonoDestinatario))))
-                .addContainerGap(68, Short.MAX_VALUE))
+                            .addComponent(txtTelefonoDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,12 +444,14 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Agencia destino:");
 
+        cboAgenciaOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         cboAgenciaOrigen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboAgenciaOrigenActionPerformed(evt);
             }
         });
 
+        cboAgenciaDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         cboAgenciaDestino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboAgenciaDestinoActionPerformed(evt);
@@ -448,6 +482,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Total a Pagar (S/): ");
 
+        cboTrabajador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         cboTrabajador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboTrabajadorActionPerformed(evt);
@@ -481,7 +516,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
                             .addComponent(jLabel16))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cboAgenciaDestino, 0, 99, Short.MAX_VALUE)
+                            .addComponent(cboAgenciaDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cboTrabajador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel17)
@@ -514,7 +549,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
                     .addComponent(txtTotalAPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23)
                     .addComponent(cboTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
 
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -529,10 +564,20 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         btnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnLimpiar.setForeground(new java.awt.Color(0, 0, 0));
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -567,20 +612,17 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(19, 19, 19))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRegistrar)
                             .addComponent(btnLimpiar)
-                            .addComponent(btnCancelar))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnCancelar))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -600,12 +642,15 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
       
+        if (!validarCampos()) return;
+        int idRuta = rutaSeleccionada.getIdRuta();
+        
         String descripcion = taDescripcionEncomienda.getText();
         double peso = Double.parseDouble(txtPeso.getText());
         double largo = Double.parseDouble(txtLargo.getText());
         double alto = Double.parseDouble(txtAlto.getText());
         double ancho = Double.parseDouble(txtAncho.getText());
-        int idRuta = rutaSeleccionada.getIdRuta();
+        
         String fecha_envio = LocalDate.now().toString();
         String estado = "Sin Asignar";
         int idTrabajador = ((Trabajador) cboTrabajador.getSelectedItem()).getIdTrabajador();
@@ -617,9 +662,9 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         } else if (rbnYape.isSelected()) {
             idMetodoPago = 3;
         }
-        // VALIDACIONES
+        
         ControladorEncomienda controlador = new ControladorEncomienda();
-        controlador.registrarEncomienda(
+        if(controlador.registrarEncomienda(
             idRemitente,
             idDestinatario,
             idRuta,
@@ -633,8 +678,12 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             estado,
             idTrabajador,
             idMetodoPago
-        );
-       
+        )) {
+            JOptionPane.showMessageDialog(this, "Registro correcto");
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo registrar la encomienda");
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void cboTipoEncomiendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTipoEncomiendaActionPerformed
@@ -670,17 +719,12 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         
         calcularFlete();
         txtFlete.setEnabled(false);
-        datosEncomiendaCompletos = true;
     }//GEN-LAST:event_cboTipoEncomiendaActionPerformed
 
     private void cboAgenciaDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAgenciaDestinoActionPerformed
         // Obtener la agencia de origen y la de destino de los comboboxes
         Agencia agenciaOrigen = (Agencia) cboAgenciaOrigen.getSelectedItem();
         Agencia agenciaDestino = (Agencia) cboAgenciaDestino.getSelectedItem();
-
-        if(!datosEncomiendaCompletos) {
-            return;
-        }
         
         // Asegurarse de que ambas agencias sean válidas y diferentes
         if (agenciaOrigen == null || agenciaDestino == null || agenciaOrigen.equals(agenciaDestino)) {
@@ -707,6 +751,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
                 txtTotalAPagar.setText(String.format("%.2f", fleteFinal));
             }
         } else {
+            cboAgenciaDestino.setSelectedIndex(0);
             txtTotalAPagar.setText("0.00");
             JOptionPane.showMessageDialog(this, "No existe una ruta directa válida entre estas agencias.", "Ruta no encontrada", JOptionPane.WARNING_MESSAGE);
         }
@@ -730,6 +775,10 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             txtDNIRemitente.setText(cliente.getDni());
             txtTelefonoRemitente.setText(cliente.getTelefono());
             idRemitente = cliente.getIdcliente();
+            
+            txtNombreRemitente.setEditable(false);
+            txtDNIRemitente.setEditable(false);
+            txtTelefonoRemitente.setEditable(false);
         }
     }//GEN-LAST:event_btnBuscarRemitenteActionPerformed
 
@@ -747,6 +796,10 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
             txtDNIDestinatario.setText(cliente.getDni());
             txtTelefonoDestinatario.setText(cliente.getTelefono());
             idDestinatario = cliente.getIdcliente();
+            
+            txtNombreDestinatario.setEditable(false);
+            txtDNIDestinatario.setEditable(false);
+            txtTelefonoDestinatario.setEditable(false);
         }
     }//GEN-LAST:event_btnBuscarDestinatarioActionPerformed
 
@@ -767,9 +820,103 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private void rbnEfectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbnEfectivoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rbnEfectivoActionPerformed
+
+    private void txtBuscarRemitenteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarRemitenteKeyTyped
+        char c = evt.getKeyChar();
+        
+        //Solo numeros
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+        
+        //Maximo 8 digitos
+        if (txtBuscarRemitente.getText().length() >= 8) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtBuscarRemitenteKeyTyped
+
+    private void txtBuscarDestinatarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarDestinatarioKeyTyped
+        char c = evt.getKeyChar();
+        
+        //Solo numeros
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+        
+        if (txtBuscarDestinatario.getText().length() >= 8) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtBuscarDestinatarioKeyTyped
+
+    private void txtBuscarRemitenteFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarRemitenteFocusGained
+        if (txtBuscarRemitente.getText().equals("DNI")) {
+            txtBuscarRemitente.setText("");
+            txtBuscarRemitente.setForeground(new java.awt.Color(0,0,0)); // Negro al escribir
+        }
+    }//GEN-LAST:event_txtBuscarRemitenteFocusGained
+
+    private void txtBuscarDestinatarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarDestinatarioFocusGained
+        if (txtBuscarDestinatario.getText().equals("DNI")) {
+            txtBuscarDestinatario.setText("");
+            txtBuscarDestinatario.setForeground(new java.awt.Color(0,0,0)); // Negro al escribir
+        }
+    }//GEN-LAST:event_txtBuscarDestinatarioFocusGained
+
+    private void txtBuscarRemitenteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarRemitenteFocusLost
+        if (txtBuscarRemitente.getText().equals("DNI") || txtBuscarRemitente.getText().isBlank()) {
+            txtBuscarRemitente.setText("DNI");
+            txtBuscarRemitente.setForeground(new java.awt.Color(153,153,153));
+        }
+    }//GEN-LAST:event_txtBuscarRemitenteFocusLost
+
+    private void txtBuscarDestinatarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarDestinatarioFocusLost
+        if (txtBuscarDestinatario.getText().equals("DNI") || txtBuscarDestinatario.getText().isBlank()) {
+            txtBuscarDestinatario.setText("DNI");
+            txtBuscarDestinatario.setForeground(new java.awt.Color(153,153,153));
+        }
+    }//GEN-LAST:event_txtBuscarDestinatarioFocusLost
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        int confirmar = JOptionPane.showConfirmDialog(this, "¿Estás seguro de cancelar el registro de la encomienda?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirmar != JOptionPane.YES_OPTION) {
+            return;
+        }
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
    
     public void limpiarCampos(){
+        txtBuscarRemitente.setText("DNI");
+        txtBuscarRemitente.setForeground(new java.awt.Color(153,153,153));
+        txtBuscarDestinatario.setText("DNI");
+        txtBuscarDestinatario.setForeground(new java.awt.Color(153,153,153));
         
+        txtNombreRemitente.setText("");
+        txtDNIRemitente.setText("");
+        txtTelefonoRemitente.setText("");
+        txtNombreDestinatario.setText("");
+        txtDNIDestinatario.setText("");
+        txtTelefonoDestinatario.setText("");
+        taDescripcionEncomienda.setText("");
+        txtPeso.setText("");
+        txtLargo.setText("");
+        txtAlto.setText("");
+        txtAncho.setText("");
+        txtFlete.setText("");
+        txtTotalAPagar.setText("");
+        
+        // Limpiar Comboboxes
+        cboTipoEncomienda.setSelectedIndex(0);
+        cboAgenciaOrigen.setSelectedIndex(0);
+        cboAgenciaDestino.setSelectedIndex(0);
+        cboTrabajador.setSelectedIndex(0);
+        
+        // Limpiar radioButtons
+        btnGrupoPago.clearSelection();
+
     }
     
     private void cargarAgencias(){
@@ -779,9 +926,13 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         cboAgenciaOrigen.removeAllItems();
         cboAgenciaDestino.removeAllItems();
         
+        Agencia seleccionar = new Agencia("Seleccionar", "", "", "", 0);
+        cboAgenciaOrigen.addItem(seleccionar);
+        cboAgenciaDestino.addItem(seleccionar);
+        
         for (Agencia a : lista) {
-            cboAgenciaOrigen.addItem(a);
-            cboAgenciaDestino.addItem(a);
+            cboAgenciaOrigen.addItem((Object) a);
+            cboAgenciaDestino.addItem((Object) a);
         }
     }
     
@@ -792,16 +943,11 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         //Obtenemos la lista desde el controlador
         List<Trabajador> lista = ctrl.listarTrabajadores();
         
-        Trabajador seleccion = new Trabajador();
-        seleccion.setIdTrabajador(0);
-        seleccion.setNombres("Seleccione...");
-        seleccion.setApellido_paterno("");
-        seleccion.setApellido_materno("");
-        
-        cboTrabajador.addItem(seleccion);
+        Trabajador seleccionar = new Trabajador(0, "Seleccionar", "", "", "", "", "", "", 0, 0, "", 0);
+        cboTrabajador.addItem(seleccionar);
         
         for (Trabajador t : lista) {
-            cboTrabajador.addItem(t);
+            cboTrabajador.addItem((Object) t);
         }
     }
     
@@ -823,26 +969,26 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         // 2. Agregar al ComboBox y al HashMap con su precio base (ejemplos de precios)
 
         // Opción "Seleccionar..."
-        cboTipoEncomienda.addItem(seleccionar);
+        cboTipoEncomienda.addItem((Object) seleccionar);
         preciosPorTipoPaquete.put(seleccionar, 0.0); 
 
         // Paquetes
-        cboTipoEncomienda.addItem(sobre);
+        cboTipoEncomienda.addItem((Object) sobre);
         preciosPorTipoPaquete.put(sobre, 5.0);
 
-        cboTipoEncomienda.addItem(cajaXXS);
+        cboTipoEncomienda.addItem((Object) cajaXXS);
         preciosPorTipoPaquete.put(cajaXXS, 8.0);
 
-        cboTipoEncomienda.addItem(cajaXS);
+        cboTipoEncomienda.addItem((Object) cajaXS);
         preciosPorTipoPaquete.put(cajaXS, 10.0);
 
-        cboTipoEncomienda.addItem(cajaS);
+        cboTipoEncomienda.addItem((Object) cajaS);
         preciosPorTipoPaquete.put(cajaS, 12.0);
 
-        cboTipoEncomienda.addItem(cajaM);
+        cboTipoEncomienda.addItem((Object) cajaM);
         preciosPorTipoPaquete.put(cajaM, 14.0); 
 
-        cboTipoEncomienda.addItem(cajaL);
+        cboTipoEncomienda.addItem((Object) cajaL);
         preciosPorTipoPaquete.put(cajaL, 18.0);
     }
     
@@ -880,6 +1026,91 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         } else {
             txtFlete.setText("0.00");
         }
+    }
+    
+    private boolean validarCampos() {
+        //Validar campos vacios
+        if (txtNombreRemitente.getText().isBlank() || txtDNIRemitente.getText().isBlank() || txtTelefonoRemitente.getText().isBlank()
+                || txtNombreDestinatario.getText().isBlank() || txtDNIDestinatario.getText().isBlank()
+                || txtTelefonoDestinatario.getText().isBlank() || taDescripcionEncomienda.getText().isBlank() || txtPeso.getText().isBlank()
+                || txtLargo.getText().isBlank() || txtAlto.getText().isBlank() || txtAncho.getText().isBlank() || txtFlete.getText().isBlank()
+                || txtTotalAPagar.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Por favor, completar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        //Validar DNI Remitente
+        String dniRemitente = txtDNIRemitente.getText().trim();
+        if (!dniRemitente.matches("\\d{8}")) {
+            JOptionPane.showMessageDialog(this, "El DNI del remitente debe tener 8 dígitos númericos", "Error", JOptionPane.ERROR_MESSAGE);
+            txtDNIRemitente.requestFocus();
+            return false;
+        }
+        
+        //Validar DNI Destinatario
+        String dniDestinatario = txtDNIDestinatario.getText().trim();
+        if (!dniDestinatario.matches("\\d{8}")) {
+            JOptionPane.showMessageDialog(this, "El DNI del destinatario debe tener 8 dígitos númericos", "Error", JOptionPane.ERROR_MESSAGE);
+            txtDNIDestinatario.requestFocus();
+            return false;
+        }
+        
+        //Validar Telefono Remitente
+        String telefonoRemitente = txtTelefonoRemitente.getText().trim();
+        if (!telefonoRemitente.matches("\\d{9}")) {
+             JOptionPane.showMessageDialog(this, "El teléfono del remitente debe tener 9 dígitos númericos", "Error", JOptionPane.ERROR_MESSAGE);
+            txtTelefonoRemitente.requestFocus();
+            return false;
+        }
+        
+        //Validar Telefono Destinatario
+        String telefonoDestinatario = txtTelefonoDestinatario.getText().trim();
+        if (!telefonoDestinatario.matches("\\d{9}")) {
+             JOptionPane.showMessageDialog(this, "El teléfono del destinatario debe tener 9 dígitos númericos", "Error", JOptionPane.ERROR_MESSAGE);
+            txtTelefonoDestinatario.requestFocus();
+            return false;
+        }
+        
+        //Validar tipoPaquete
+        TipoPaquete tipoPaquete = (TipoPaquete) cboTipoEncomienda.getSelectedItem();
+        if (tipoPaquete == null || tipoPaquete.getNombre().equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un tipo de Paquete", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        //Validar agencia de origen
+        Agencia agenciaOrigen = (Agencia) cboAgenciaOrigen.getSelectedItem();
+        if (agenciaOrigen == null || agenciaOrigen.getNombre().equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar una agencia de origen", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        //Validar agencia de destino
+        Agencia agenciaDestino = (Agencia) cboAgenciaDestino.getSelectedItem();
+        if (agenciaDestino == null || agenciaDestino.getNombre().equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar una agencia de destino", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        // Validar métodos de pago
+        if (!(rbnEfectivo.isSelected() || rbnTarjeta.isSelected()|| rbnYape.isSelected())) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un método de pago", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        //Validar trabajador
+        Trabajador trabajador = (Trabajador) cboTrabajador.getSelectedItem();
+        if (trabajador == null || trabajador.getNombres().equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un trabajador", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        // Validar ruta
+        if(rutaSeleccionada == null || rutaSeleccionada.getIdRuta() <= 0) {
+            JOptionPane.showMessageDialog(this, "No hay una ruta válida para la agencia de origen y destino seleccionadas", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true; //SI TODO ES VÁLIDO
     }
     
     public static void main(String args[]) {
@@ -923,10 +1154,10 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegistrarDestinatario;
     private javax.swing.JButton btnRegistrarRemitente;
-    private javax.swing.JComboBox<Agencia> cboAgenciaDestino;
-    private javax.swing.JComboBox<Agencia> cboAgenciaOrigen;
-    private javax.swing.JComboBox<TipoPaquete> cboTipoEncomienda;
-    private javax.swing.JComboBox<Trabajador> cboTrabajador;
+    private javax.swing.JComboBox<Object> cboAgenciaDestino;
+    private javax.swing.JComboBox<Object> cboAgenciaOrigen;
+    private javax.swing.JComboBox<Object> cboTipoEncomienda;
+    private javax.swing.JComboBox<Object> cboTrabajador;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
