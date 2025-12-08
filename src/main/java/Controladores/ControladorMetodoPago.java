@@ -34,5 +34,9 @@ public class ControladorMetodoPago {
     //La vista usa este metodo para obtener el ID del nombre seleccionado
     public int obtenerIdMetodoPago(String nombre){
         return mapMetodosPago.getOrDefault(nombre, -1);
-    }  
+    }
+    
+    public MetodoPago buscarPorId(int id) {
+        return metodoPagoDAO.buscar(id);
+    }
 }

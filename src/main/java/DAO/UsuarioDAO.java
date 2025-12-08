@@ -76,4 +76,32 @@ public class UsuarioDAO {
         }
         return usuario;
     }
+   
+   public Usuario buscar(int id) {
+         String sql = "SELECT * FROM Usuario WHERE idUsuario=?";
+
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapear(rs);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error al buscar encomienda: " + ex.getMessage());
+        }
+        return null;
+
+    }
+   
+   // --- Método para mapear un ResultSet a un objeto Encomienda ---
+    private Usuario mapear(ResultSet rs) throws Exception {
+        return new Usuario(
+                rs.getInt("idUsuario"),
+                rs.getString("nombre"),
+                rs.getString("correo"),
+                rs.getString("contraseña")
+        );
+    }
 }
