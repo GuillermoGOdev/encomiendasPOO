@@ -15,6 +15,7 @@ import DTO.Despacho;
 import DTO.Ruta;
 import DTO.Trabajador;
 import DTO.Vehiculo;
+import java.awt.Label;
 import java.util.Date;
 import java.util.HashSet;
 import javax.swing.DefaultComboBoxModel;
@@ -26,19 +27,27 @@ import javax.swing.JOptionPane;
  * @author vivas
  */
 public class ModuloConsolidado extends javax.swing.JFrame {
-
+    
     VehiculoDAO vehiculo = new VehiculoDAO();
     RutaDAO rutaDAO = new RutaDAO();
     TrabajadorDAO TrabajadorDAO = new TrabajadorDAO();
-
+    private String modo;
+    
     public ModuloConsolidado() {
         initComponents();
         cargarVehiculosCombo();
         cargarRutaCombo();
         cargarChoferesCombo();
+        nombrelabel(modo);
+        
     }
-/////////// Cargar Placas ////////////
+    
+    public void nombrelabel(String nombre) {
+        modo = nombre;
+        lblModulo.setText(modo);
+    }
 
+/////////// Cargar Placas ////////////
     private void cargarVehiculosCombo() {
         DefaultComboBoxModel<Vehiculo> modelo = new DefaultComboBoxModel<>();
         Vehiculo opcion = new Vehiculo();
@@ -48,7 +57,7 @@ public class ModuloConsolidado extends javax.swing.JFrame {
         for (Vehiculo v : vehiculo.listarVehiculosCombo()) {
             modelo.addElement(v);
         }
-
+        
         cboVehiculo.setModel(modelo);
     }
 
@@ -79,7 +88,7 @@ public class ModuloConsolidado extends javax.swing.JFrame {
         }
         cboConductor.setModel(modelo);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -93,7 +102,7 @@ public class ModuloConsolidado extends javax.swing.JFrame {
         cboConductor = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         cboRuta = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
+        lblModulo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         DataChooser = new com.toedter.calendar.JDateChooser();
         jLabel16 = new javax.swing.JLabel();
@@ -145,12 +154,11 @@ public class ModuloConsolidado extends javax.swing.JFrame {
         cboRuta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel1.add(cboRuta, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 190, -1));
 
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Registrar Despacho");
-        jLabel5.setToolTipText("DNI");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 22, 230, -1));
+        lblModulo.setBackground(new java.awt.Color(255, 255, 255));
+        lblModulo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblModulo.setForeground(new java.awt.Color(255, 255, 255));
+        lblModulo.setToolTipText("DNI");
+        jPanel1.add(lblModulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 22, 230, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/camion_1.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 40, 30));
@@ -261,7 +269,7 @@ public class ModuloConsolidado extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblModulo;
     // End of variables declaration//GEN-END:variables
 }

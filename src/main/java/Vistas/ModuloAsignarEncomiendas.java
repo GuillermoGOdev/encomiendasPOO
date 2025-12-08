@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  * @author vivas
  */
 public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
-    
+
     int IdConsolidado = 0;
     int IdRuta = 0;
     double kilos;
@@ -37,30 +37,28 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
     double capacidadVolumen = 0;
     Design_JTable design_table = new Design_JTable();
     DecimalFormat formato = new DecimalFormat("#,###.##");
-    
+
     public ModuloAsignarEncomiendas() {
         initComponents();
-        
+
     }
-    
+
     DespachoDAO descachoDao = new DespachoDAO();
     DetalleConsolidadoDAO detalle = new DetalleConsolidadoDAO();
     ControladorDetalleConsolidado controlador = new ControladorDetalleConsolidado();
-    
+
     public void setDatos(int idConsolidado, int idruta, String ruta, String placa, double kg, double volumen,
-            double kg_comprometido, double volumen_comprometido, int cantpaq,
-            String conductor, Date fechaSalida) {
-        
+        double kg_comprometido, double volumen_comprometido, int cantpaq,
+        String conductor, Date fechaSalida, String condicion) {
+
         IdConsolidado = idConsolidado;
         IdRuta = idruta;
         capacidadKg = kg;
         capacidadVolumen = volumen;
         kgcom = kg_comprometido;
         volCom = volumen_comprometido;
-        
         DisponibleKg = capacidadKg - kgcom;
         DisponibleVol = capacidadVolumen - volCom;
-        
         lblRuta.setText(ruta);
         lblPlaca.setText(placa);
         lblCapacidadKg.setText(String.valueOf(DisponibleKg) + " kg");
@@ -68,7 +66,18 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
         lblPaq.setText(String.valueOf(cantpaq));
         lblConductor.setText(conductor);
         lblFecha.setText(fechaSalida.toString());
-        mostrarEncomiendasEnTabla(TablaEncomiendas, IdRuta);
+        
+        
+        String Condicional = condicion;
+        
+        if (Condicional == "Agregar") {
+            mostrarEncomiendasEnTabla(TablaEncomiendas, IdRuta);
+            btnAgregar.setText("Agregar");
+        }
+        
+        
+        
+        
         design_table.ocultarColumnas(TablaEncomiendas, 1);
         design_table.ocultarColumnas(TablaEncomiendas, 2);
         design_table.ocultarColumnas(TablaEncomiendas, 4);
@@ -77,19 +86,19 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
 
     public void mostrarEncomiendasEnTabla(JTable Tabla, int idRuta) {
         DefaultTableModel modeloOriginal = descachoDao.listarEncomiendasPorRuta(idRuta);
-        
+
         String[] titulos = new String[modeloOriginal.getColumnCount() + 1];
         titulos[0] = "Agregar";
         for (int i = 0; i < modeloOriginal.getColumnCount(); i++) {
             titulos[i + 1] = modeloOriginal.getColumnName(i);
         }
-        
+
         DefaultTableModel modelo = new DefaultTableModel(null, titulos) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 0; // Solo la columna de checkbox editable
             }
-            
+
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 if (columnIndex == 0) {
@@ -125,27 +134,27 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
         for (int i = 0; i < TablaEncomiendas.getRowCount(); i++) {
             Object chk = TablaEncomiendas.getValueAt(i, 0);
             boolean marcado = Boolean.TRUE.equals(chk);
-            
+
             if (marcado) {
                 try {
                     double peso = Double.parseDouble(TablaEncomiendas.getValueAt(i, 7).toString());
                     double largo = Double.parseDouble(TablaEncomiendas.getValueAt(i, 8).toString());
                     double ancho = Double.parseDouble(TablaEncomiendas.getValueAt(i, 10).toString());
                     double alto = Double.parseDouble(TablaEncomiendas.getValueAt(i, 9).toString());
-                    
+
                     pesoTotal += peso;
                     volumenTotal += largo * ancho * alto;
                 } catch (Exception ex) {
                 }
             }
         }
-        
+
         lblPeso.setText(formato.format(pesoTotal) + " kg");
         lblVolumen.setText(formato.format(volumenTotal) + " cm3");
         kilos = pesoTotal;
         volumen = volumenTotal;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -329,31 +338,31 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 ////////////// BOTON AGREGAR ////////////////
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        
+
         boolean sobrepeso = kilos > DisponibleKg;
         boolean sobrevolumen = volumen > DisponibleVol;
-        
+
         if (sobrepeso || sobrevolumen) {
-            
+
             String mensaje = "Capacidad del vehículo superada:\n\n";
-            
+
             if (sobrepeso) {
                 double excesoPeso = kilos - DisponibleKg;
                 mensaje += "- Exceso en PESO: " + formato.format(excesoPeso) + " kg\n";
             }
-            
+
             if (sobrevolumen) {
                 double excesoVol = volumen - DisponibleVol;
                 mensaje += "- Exceso en VOLUMEN: " + formato.format(excesoVol) + " cm³\n";
             }
-            
+
             JOptionPane.showMessageDialog(this, mensaje);
             return; // 🚫 Se detiene el proceso (NO registra)
         }
 // 2) Si todo está correcto, registrar normalmente
         int idConsolidado = this.IdConsolidado;
         List<Integer> ids = controlador.getEncomiendasSeleccionadas(TablaEncomiendas);
-        
+
         if (ids.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No hay encomiendas seleccionadas.");
             return;
@@ -362,7 +371,7 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
 // 3) Insertar vía DAO
         DetalleConsolidadoDAO dao = new DetalleConsolidadoDAO();
         boolean correcto = dao.registrarDetallesMasivos(idConsolidado, ids);
-        
+
         if (correcto) {
             JOptionPane.showMessageDialog(this, "Encomiendas asignadas correctamente.");
             mostrarEncomiendasEnTabla(TablaEncomiendas, IdRuta);
@@ -372,7 +381,7 @@ public class ModuloAsignarEncomiendas extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Ocurrió un error al asignar las encomiendas.");
         }
-        
+
 
     }//GEN-LAST:event_btnAgregarActionPerformed
 

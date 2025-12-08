@@ -9,7 +9,13 @@ public class Encomienda {
     public double Peso_kg, Largo, Alto, Ancho, CostoEnvio;
     private Date Fecha_Envio;
 
-   
+    public Encomienda(int IdEncomienda, double Peso_kg, double Largo, double Alto, double Ancho) {
+        this.IdEncomienda = IdEncomienda;
+        this.Peso_kg = Peso_kg;
+        this.Largo = Largo;
+        this.Alto = Alto;
+        this.Ancho = Ancho;
+    }
 
     public Encomienda() {
     }
@@ -44,8 +50,8 @@ public class Encomienda {
         this.CostoEnvio = CostoEnvio;
         this.Fecha_Envio = Fecha_Envio;
     }
-    
-     public void setIdEncomienda(int IdEncomienda) {
+
+    public void setIdEncomienda(int IdEncomienda) {
         this.IdEncomienda = IdEncomienda;
     }
 

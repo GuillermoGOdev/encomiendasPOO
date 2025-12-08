@@ -20,12 +20,13 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
 
     VehiculoDAO vehiculo = new VehiculoDAO();
     Design_JTable design_table = new Design_JTable();
+    ModuloConsolidado vista = new ModuloConsolidado();
 
     public ModuloPrincipalConsolidado() {
         initComponents();
         cargarVehiculosCombo();
-//        llenarTablaDespacho();
         LlenarTabla();
+
     }
 
 /////////// Cargar Placas ////////////
@@ -42,13 +43,6 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         cboPlaca.setModel(modelo);
     }
 
-//    private void llenarTablaDespacho() {
-//
-//        DespachoDAO dao = new DespachoDAO();
-//
-//        // Para cargar todo sin filtros:
-//        tablaDespacho.setModel(dao.listarDespacho(null, null));
-//    }
     private void LlenarTabla() {
 
         // Obtener la placa desde el combo
@@ -68,6 +62,8 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         // Llamar al DAO
         DespachoDAO dao = new DespachoDAO();
         tablaDespacho.setModel(dao.listarDespacho(placa, fechaSQL));
+        
+        // Ocultar Columnas
         design_table.ocultarColumnas(tablaDespacho, 0);
         design_table.ocultarColumnas(tablaDespacho, 1);
         design_table.ocultarColumnas(tablaDespacho, 11);
@@ -90,11 +86,12 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jdcFecha = new com.toedter.calendar.JDateChooser();
         btnBuscar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
         btnAgregarEncomiendas = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnEditar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,7 +130,7 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaDespacho);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 920, 310));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 920, 300));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
@@ -154,8 +151,13 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         });
         jPanel2.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, 100, 30));
 
-        jButton1.setText("Editar");
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
+        btnEditar.setText("Ver Detalle");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, -1, -1));
 
         btnAgregarEncomiendas.setText("Agregar Encomiendas");
         btnAgregarEncomiendas.addActionListener(new java.awt.event.ActionListener() {
@@ -163,7 +165,7 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
                 btnAgregarEncomiendasActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAgregarEncomiendas, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 220, -1, -1));
+        jPanel2.add(btnAgregarEncomiendas, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 220, -1, -1));
 
         jButton3.setText("Nuevo");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -173,16 +175,29 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         });
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
 
-        jButton4.setText("Eliminar");
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, -1, -1));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, -1, -1));
 
-        jButton2.setText("Actualizar Datos");
+        jButton2.setText("Actualizar Tabla");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 220, -1, -1));
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 160, 150, -1));
+
+        btnEditar1.setText("Editar");
+        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditar1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,9 +228,11 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        ModuloConsolidado vista = new ModuloConsolidado();
+
         vista.setVisible(true);
         vista.setLocationRelativeTo(null);
+        vista.nombrelabel("Registrar Despacho");
+
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -237,19 +254,60 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
         double volumenComprometido = Double.parseDouble(tablaDespacho.getValueAt(fila, 7).toString());
         int cantpaq = Integer.parseInt(tablaDespacho.getValueAt(fila, 8).toString());
         String conductor = tablaDespacho.getValueAt(fila, 9).toString();
-        Date fechaSalida = (Date) tablaDespacho.getValueAt(fila, 10); // si usas java.util.Date o java.sql.Date
+        Date fechaSalida = (Date) tablaDespacho.getValueAt(fila, 10); 
+        String condicion = "Agregar";
 
+        
         // Crear ventana y enviar datos
         ModuloAsignarEncomiendas ventana = new ModuloAsignarEncomiendas();
         ventana.setDatos(idConsolidado, idRuta, ruta, placa, capacidadKg, capacidadVolumen,
                 kg_comprometido, volumenComprometido, cantpaq,
-                conductor, fechaSalida);
+                conductor, fechaSalida, condicion);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnAgregarEncomiendasActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         LlenarTabla();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        vista.setVisible(true);
+        vista.setLocationRelativeTo(null);
+        vista.nombrelabel("Editar Despacho");
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int fila = tablaDespacho.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un vehículo para eliminar");
+            return;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(
+                null,
+                "¿Seguro que deseas eliminar este consolidado?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            int id = Integer.parseInt(tablaDespacho.getValueAt(fila, 0).toString());
+            DespachoDAO Dao = new DespachoDAO();
+            if (Dao.eliminarConsolidado(id)) {
+                JOptionPane.showMessageDialog(null, "Consolidado eliminado");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Operación cancelada");
+        }
+
+        LlenarTabla();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,11 +347,12 @@ public class ModuloPrincipalConsolidado extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEncomiendas;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEditar1;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<Vehiculo> cboPlaca;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;

@@ -45,25 +45,55 @@ public class DespachoDAO {
     public DefaultTableModel listarDespacho(String placa, java.sql.Date fecha) {
 
         String[] titulos = {
-            "ID","IdRuta", "Ruta", "Vehículo", "Conductor", "Fecha salida", "Estado"
+            "ID", "IdRuta", "Ruta", "Vehículo", "CapacidadKg", "CapacidadVolumen", "Kg_comprometido", "Volumen_comprometido",
+            "Cant_Paq",
+            "Conductor", "Fecha salida", "Estado"
         };
 
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
-        String sql = "SELECT "
-                + "c.id_consolidado,"
-                + "c.id_ruta, "
-                + "r.descripcion, "
-                + "v.placa, "
-                + "CONCAT(p.nombres, ' ', p.apellido_paterno) AS conductor, "
-                + "c.fecha_salida, "
-                + "c.estado "
-                + "FROM Consolidado c "
-                + "INNER JOIN Ruta r ON c.id_ruta = r.id_ruta "
-                + "INNER JOIN Vehiculo v ON c.id_vehiculo = v.id_vehiculo "
-                + "INNER JOIN Trabajador t ON c.id_trabajador_conductor = t.idtrabajador "
-                + "INNER JOIN Persona p ON t.idpersona = p.idpersona "
-                + "WHERE 1 = 1 "; 
+        String sql = "SELECT \n"
+                + "    c.id_consolidado,\n"
+                + "    c.id_ruta,\n"
+                + "    r.descripcion,\n"
+                + "    v.placa,\n"
+                + "    v.capacidad_kg,\n"
+                + "    v.capacidad_volumen_m3,\n"
+                + "\n"
+                + "    (\n"
+                + "        SELECT IFNULL(SUM(S2.peso_kg),0)\n"
+                + "        FROM DetalleConsolidado S1\n"
+                + "        INNER JOIN Encomienda S2 \n"
+                + "            ON S1.id_encomienda = S2.id_encomienda\n"
+                + "        WHERE S1.id_consolidado = c.id_consolidado\n"
+                + "    ) AS Kg_comprometido,\n"
+                + "\n"
+                + "    (\n"
+                + "        SELECT ROUND(IFNULL(SUM(S2.largo * S2.alto * S2.ancho),0),2)\n"
+                + "        FROM DetalleConsolidado S1\n"
+                + "        INNER JOIN Encomienda S2 \n"
+                + "            ON S1.id_encomienda = S2.id_encomienda\n"
+                + "        WHERE S1.id_consolidado = c.id_consolidado\n"
+                + "    ) AS Volumen_comprometido,\n"
+                + "    \n"
+                + "        (\n"
+                + "        SELECT IFNULL(count(S1.id_encomienda),0)\n"
+                + "        FROM DetalleConsolidado S1\n"
+                + "        INNER JOIN Encomienda S2 \n"
+                + "            ON S1.id_encomienda = S2.id_encomienda\n"
+                + "        WHERE S1.id_consolidado = c.id_consolidado\n"
+                + "    ) AS Cant_Paq,\n"
+                + "\n"
+                + "    CONCAT(p.nombres, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS conductor,\n"
+                + "    c.fecha_salida,\n"
+                + "    c.estado\n"
+                + "\n"
+                + "FROM Consolidado c\n"
+                + "INNER JOIN Ruta r ON c.id_ruta = r.id_ruta\n"
+                + "INNER JOIN Vehiculo v ON c.id_vehiculo = v.id_vehiculo\n"
+                + "INNER JOIN Trabajador t ON c.id_trabajador_conductor = t.idtrabajador\n"
+                + "INNER JOIN Persona p ON t.idpersona = p.idpersona \n"
+                + "WHERE 1 = 1 ";
 
         // FILTROS
         if (placa != null && !placa.equals("Seleccionar")) {
@@ -93,6 +123,11 @@ public class DespachoDAO {
                     rs.getInt("id_ruta"),
                     rs.getString("descripcion"),
                     rs.getString("placa"),
+                    rs.getString("capacidad_kg"),
+                    rs.getString("capacidad_volumen_m3"),
+                    rs.getString("Kg_comprometido"),
+                    rs.getString("Volumen_comprometido"),
+                    rs.getString("Cant_Paq"),
                     rs.getString("conductor"),
                     rs.getDate("fecha_salida"),
                     rs.getString("estado")
@@ -107,66 +142,79 @@ public class DespachoDAO {
     }
 
     public DefaultTableModel listarEncomiendasPorRuta(int idRuta) {
-    // Ahora la primera columna será el checkbox
-    String[] titulos = {
-        "Seleccionar", "ID Encomienda", "Fecha Envio", "ID Ruta", "Ruta", "Descripcion",
-        "Peso (kg)", "Largo", "Alto", "Ancho", "Costo"
-    };
+        // Ahora la primera columna será el checkbox
+        String[] titulos = {
+            "Seleccionar", "ID Encomienda", "Fecha Envio", "ID Ruta", "Ruta", "Descripcion",
+            "Peso (kg)", "Largo", "Alto", "Ancho", "Costo"
+        };
 
-    // Sobrescribimos el DefaultTableModel para que la primera columna sea editable y tipo Boolean
-    DefaultTableModel modelo = new DefaultTableModel(null, titulos) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            // Solo la primera columna (checkbox) será editable
-            return column == 0;
-        }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            if (columnIndex == 0) {
-                return Boolean.class; // checkbox
+        // Sobrescribimos el DefaultTableModel para que la primera columna sea editable y tipo Boolean
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Solo la primera columna (checkbox) será editable
+                return column == 0;
             }
-            return super.getColumnClass(columnIndex);
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0) {
+                    return Boolean.class; // checkbox
+                }
+                return super.getColumnClass(columnIndex);
+            }
+        };
+
+        String sql = "SELECT T0.id_encomienda, T0.fecha_envio, T0.id_ruta, "
+                + "T1.descripcion AS Ruta, T0.descripcion AS Encomienda, "
+                + "T0.peso_kg, T0.largo, T0.alto, T0.ancho, T0.costo_envio "
+                + "FROM luisgonz_poo_guillermo.Encomienda T0 "
+                + "INNER JOIN Ruta T1 ON T0.id_ruta = T1.id_ruta "
+                + "WHERE T0.id_ruta = ? and T0.estado = 'Sin Asignar' "
+                + "ORDER BY T0.fecha_envio DESC";
+
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idRuta);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // La primera columna será false por defecto (checkbox no seleccionado)
+                modelo.addRow(new Object[]{
+                    false, // checkbox
+                    rs.getInt("id_encomienda"),
+                    rs.getDate("fecha_envio"),
+                    rs.getInt("id_ruta"),
+                    rs.getString("Ruta"),
+                    rs.getString("Encomienda"),
+                    rs.getDouble("peso_kg"),
+                    rs.getDouble("largo"),
+                    rs.getDouble("alto"),
+                    rs.getDouble("ancho"),
+                    rs.getDouble("costo_envio")
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al listar encomiendas: " + e.getMessage());
         }
-    };
 
-    String sql = "SELECT T0.id_encomienda, T0.fecha_envio, T0.id_ruta, "
-               + "T1.descripcion AS Ruta, T0.descripcion AS Encomienda, "
-               + "T0.peso_kg, T0.largo, T0.alto, T0.ancho, T0.costo_envio "
-               + "FROM luisgonz_poo_guillermo.Encomienda T0 "
-               + "INNER JOIN Ruta T1 ON T0.id_ruta = T1.id_ruta "
-               + "WHERE T0.id_ruta = ? "
-               + "ORDER BY T0.fecha_envio DESC";
-
-    try (Connection con = ConexionSQL.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
-
-        ps.setInt(1, idRuta);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            // La primera columna será false por defecto (checkbox no seleccionado)
-            modelo.addRow(new Object[]{
-                false, // checkbox
-                rs.getInt("id_encomienda"),
-                rs.getDate("fecha_envio"),
-                rs.getInt("id_ruta"),
-                rs.getString("Ruta"),
-                rs.getString("Encomienda"),
-                rs.getDouble("peso_kg"),
-                rs.getDouble("largo"),
-                rs.getDouble("alto"),
-                rs.getDouble("ancho"),
-                rs.getDouble("costo_envio")
-            });
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al listar encomiendas: " + e.getMessage());
+        return modelo;
     }
 
-    return modelo;
-}
+    public boolean eliminarConsolidado(int id) {
+        String sql = "DELETE FROM Consolidado WHERE id_consolidado=?";
+        boolean ok = false;
 
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ok = ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar consolidado: " + e.getMessage());
+        }
+        return ok;
+    }
 
 }
