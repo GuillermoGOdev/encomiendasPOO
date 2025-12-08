@@ -23,7 +23,7 @@ public class ComprobanteDAO {
             ps.setInt(1, c.getIdEncomienda());
             ps.setString(2, c.getTipo());
             ps.setString(3, c.getSerie());
-            ps.setInt(4, c.getNumero());
+            ps.setString(4, c.getNumero());
             ps.setDate(5, new java.sql.Date(c.getFechaEmision().getTime()));
             ps.setDouble(6, c.getSubtotal());
             ps.setDouble(7, c.getIgv());
@@ -52,7 +52,7 @@ public class ComprobanteDAO {
                 c.setIdEncomienda(rs.getInt("id_encomienda"));
                 c.setTipo(rs.getString("tipo"));
                 c.setSerie(rs.getString("serie"));
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getString("numero"));
                 c.setFechaEmision(rs.getDate("fecha_emision"));
                 c.setSubtotal(rs.getDouble("subtotal"));
                 c.setIgv(rs.getDouble("igv"));
@@ -86,7 +86,7 @@ public class ComprobanteDAO {
                 c.setIdEncomienda(rs.getInt("id_encomienda"));
                 c.setTipo(rs.getString("tipo"));
                 c.setSerie(rs.getString("serie"));
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getString("numero"));
                 c.setFechaEmision(rs.getDate("fecha_emision"));
                 c.setSubtotal(rs.getDouble("subtotal"));
                 c.setIgv(rs.getDouble("igv"));

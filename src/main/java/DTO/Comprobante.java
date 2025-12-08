@@ -6,7 +6,7 @@ import java.sql.Date;
 public class Comprobante {
     private int idComprobante, idEncomienda;
     private String tipo, serie;
-    private int numero;
+    private String numero;
     private java.sql.Date fechaEmision;
     private double subtotal, igv, total;
     private int idMetodoPago;
@@ -14,7 +14,7 @@ public class Comprobante {
     
     public Comprobante(){}
     
-    public Comprobante(int idComprobante, int idEncomienda, String tipo, String serie, int numero, Date fechaEmision, double subtotal, double igv, double total, int idMetodoPago) {
+    public Comprobante(int idComprobante, int idEncomienda, String tipo, String serie, String numero, Date fechaEmision, double subtotal, double igv, double total, int idMetodoPago) {
         this.idComprobante = idComprobante;
         this.idEncomienda = idEncomienda;
         this.tipo = tipo;
@@ -59,11 +59,11 @@ public class Comprobante {
         this.serie = serie;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

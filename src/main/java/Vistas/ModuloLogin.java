@@ -195,12 +195,16 @@ public class ModuloLogin extends javax.swing.JFrame {
             return;
         }
         
+        usuarioLogueado = usuario; //Guardamos al usuario
         JOptionPane.showMessageDialog(this, "Bienvenido: "+usuario.getNombre(),"Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
         Menu menu = new Menu();
         menu.setVisible(true);
+        ModuloComprobante mc = new ModuloComprobante();
+        mc.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnIniciarSesiónActionPerformed
 
+    public static Usuario usuarioLogueado;
     /**
      * @param args the command line arguments
      */

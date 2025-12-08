@@ -49,4 +49,8 @@ public class ControladorUsuario {
         }
         return dao.iniciarSesion(correo, contrasena);
     }
+    
+    public Usuario buscarPorId(int id) {
+        return dao.buscar(id);
+    }
 }
