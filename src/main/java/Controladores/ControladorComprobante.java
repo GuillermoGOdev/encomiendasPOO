@@ -214,11 +214,11 @@ public class ControladorComprobante {
 
             // Rellenar vacíos
             for (int i = 0; i < 4; i++) {
-                tblDetalle.addCell(getDataCell("", fontNormal, Element.ALIGN_CENTER));
-                tblDetalle.addCell(getDataCell("", fontNormal, Element.ALIGN_CENTER));
-                tblDetalle.addCell(getDataCell("", fontNormal, Element.ALIGN_CENTER));
-                tblDetalle.addCell(getDataCell("", fontNormal, Element.ALIGN_CENTER));
-                tblDetalle.addCell(getDataCell("", fontNormal, Element.ALIGN_CENTER));
+                tblDetalle.addCell(getDataCell(" ", fontNormal, Element.ALIGN_CENTER));
+                tblDetalle.addCell(getDataCell(" ", fontNormal, Element.ALIGN_CENTER));
+                tblDetalle.addCell(getDataCell(" ", fontNormal, Element.ALIGN_CENTER));
+                tblDetalle.addCell(getDataCell(" ", fontNormal, Element.ALIGN_CENTER));
+                tblDetalle.addCell(getDataCell(" ", fontNormal, Element.ALIGN_CENTER));
             }
 
             doc.add(tblDetalle);
