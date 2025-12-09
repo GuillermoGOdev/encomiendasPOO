@@ -16,8 +16,8 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
         String sql = """
             INSERT INTO Encomienda
             (id_cliente_remitente, id_cliente_destinatario, id_ruta, descripcion, peso_kg,
-             largo, alto, ancho, costo_envio, fecha_envio, estado, idtrabajador, idMetodoPago)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+             largo, alto, ancho, costo_envio, fecha_envio, estado, idtrabajador, idMetodoPago, pago)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         """;
 
         try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)){
@@ -35,6 +35,7 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
             ps.setString(11, e.getEstado());
             ps.setInt(12, e.getIdTrabajador());
             ps.setInt(13, e.getIdMetodoPago());
+            ps.setString(14, e.getPago());
 
             return ps.executeUpdate() > 0;
             
@@ -65,7 +66,7 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
         String sql = """
             UPDATE Encomienda SET
             id_cliente_remitente=?, id_cliente_destinatario=?, id_ruta=?, descripcion=?,
-            peso_kg=?, largo=?, alto=?, ancho=?, costo_envio=?, fecha_envio=?, estado=?, idtrabajador=?, idMetodoPago=?
+            peso_kg=?, largo=?, alto=?, ancho=?, costo_envio=?, fecha_envio=?, estado=?, idtrabajador=?, idMetodoPago=?, pago=?
             WHERE id_encomienda=?
         """;
 
@@ -84,7 +85,8 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
             ps.setString(11, e.getEstado());
             ps.setInt(12, e.getIdTrabajador());
             ps.setInt(13, e.getIdMetodoPago());
-            ps.setInt(14, e.getIdEncomienda());
+            ps.setString(14, e.getPago());
+            ps.setInt(15, e.getIdEncomienda());
 
             return ps.executeUpdate() > 0;
 
@@ -133,6 +135,20 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
 
     }
     
+    public boolean pagar (int id) {
+        String sql = "UPDATE Encomienda SET pago='Pagado' WHERE id_encomienda=?";
+
+        try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception ex) {
+            System.out.println("Error pagando encomienda: " + ex.getMessage());
+            return false;
+        }
+
+    }
+    
     // --- Método para mapear un ResultSet a un objeto Encomienda ---
     private Encomienda mapear(ResultSet rs) throws Exception {
         return new Encomienda(
@@ -149,7 +165,8 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
                 rs.getString("fecha_envio"),
                 rs.getString("estado"),
                 rs.getInt("idtrabajador"),
-                rs.getInt("idMetodoPago")
+                rs.getInt("idMetodoPago"),
+                rs.getString("pago")
         );
     }
 }

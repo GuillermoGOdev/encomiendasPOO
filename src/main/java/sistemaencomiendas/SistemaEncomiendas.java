@@ -7,6 +7,7 @@ public class SistemaEncomiendas {
 
     public static void main(String[] args) {
         ConexionSQL.conectar();
+        
         ModuloLogin lg = new ModuloLogin();
         lg.setVisible(true);
         //HolaMundo

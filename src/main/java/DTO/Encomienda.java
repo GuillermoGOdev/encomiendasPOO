@@ -5,7 +5,7 @@ import java.util.Date;
 public class Encomienda {
 
     private int IdEncomienda, IdClienteRemitente, IdClienteDestinatario, IdRuta, IdTrabajador, idMetodoPago;
-    private String Descripcion, Estado, Fecha_Envio;
+    private String Descripcion, Estado, Fecha_Envio, pago;
     public double Peso_kg, Largo, Alto, Ancho, CostoEnvio;
 
     public Encomienda(int IdEncomienda, double Peso_kg, double Largo, double Alto, double Ancho) {
@@ -19,7 +19,7 @@ public class Encomienda {
     public Encomienda() {
     }
 
-    public Encomienda(int IdClienteRemitente, int IdClienteDestinatario, int IdRuta, String Descripcion, double Peso_kg, double Largo, double Alto, double Ancho, double CostoEnvio, String Fecha_Envio, String Estado, int IdTrabajador, int idMetodoPago) {
+    public Encomienda(int IdClienteRemitente, int IdClienteDestinatario, int IdRuta, String Descripcion, double Peso_kg, double Largo, double Alto, double Ancho, double CostoEnvio, String Fecha_Envio, String Estado, int IdTrabajador, int idMetodoPago, String pago) {
         this.IdClienteRemitente = IdClienteRemitente;
         this.IdClienteDestinatario = IdClienteDestinatario;
         this.IdRuta = IdRuta;
@@ -33,9 +33,10 @@ public class Encomienda {
         this.CostoEnvio = CostoEnvio;
         this.Fecha_Envio = Fecha_Envio;
         this.idMetodoPago = idMetodoPago;
+        this.pago = pago;
     }
     
-    public Encomienda(int IdEncomienda, int IdClienteRemitente, int IdClienteDestinatario, int IdRuta, String Descripcion, double Peso_kg, double Largo, double Alto, double Ancho, double CostoEnvio, String Fecha_Envio, String Estado, int IdTrabajador, int idMetodoPago) {
+    public Encomienda(int IdEncomienda, int IdClienteRemitente, int IdClienteDestinatario, int IdRuta, String Descripcion, double Peso_kg, double Largo, double Alto, double Ancho, double CostoEnvio, String Fecha_Envio, String Estado, int IdTrabajador, int idMetodoPago, String pago) {
         this.IdEncomienda = IdEncomienda;
         this.IdClienteRemitente = IdClienteRemitente;
         this.IdClienteDestinatario = IdClienteDestinatario;
@@ -50,6 +51,7 @@ public class Encomienda {
         this.CostoEnvio = CostoEnvio;
         this.Fecha_Envio = Fecha_Envio;
         this.idMetodoPago = idMetodoPago;
+        this.pago = pago;
     }
 
     public void setIdEncomienda(int IdEncomienda) {
@@ -162,5 +164,13 @@ public class Encomienda {
 
     public void setIdMetodoPago(int idMetodoPago) {
         this.idMetodoPago = idMetodoPago;
+    }
+
+    public String getPago() {
+        return pago;
+    }
+
+    public void setPago(String pago) {
+        this.pago = pago;
     }
 }
