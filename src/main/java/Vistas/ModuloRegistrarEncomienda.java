@@ -22,6 +22,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
     private double fleteFinal = -1;
     private int idRemitente;
     private int idDestinatario;
+    private int idEncomienda;
     
     public ModuloRegistrarEncomienda() {
         initComponents();
@@ -34,6 +35,20 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         txtBuscarRemitente.setForeground(new java.awt.Color(153,153,153));
         txtBuscarDestinatario.setText("DNI");
         txtBuscarDestinatario.setForeground(new java.awt.Color(153,153,153));
+    }
+    
+    public ModuloRegistrarEncomienda(int id) {
+        initComponents();
+        cargarAgencias();
+        cargarTipoPaquete();
+        desactivarCamposDimensiones();
+        cargarTrabajadores();
+        cargarMetodosPago();
+        txtBuscarRemitente.setText("DNI");
+        txtBuscarRemitente.setForeground(new java.awt.Color(153,153,153));
+        txtBuscarDestinatario.setText("DNI");
+        txtBuscarDestinatario.setForeground(new java.awt.Color(153,153,153));
+        idEncomienda = id;
     }
 
     
@@ -98,7 +113,7 @@ public class ModuloRegistrarEncomienda extends javax.swing.JFrame {
         btnLimpiar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar Encomienda");
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));

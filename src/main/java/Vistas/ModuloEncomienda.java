@@ -17,7 +17,6 @@ public class ModuloEncomienda extends javax.swing.JFrame {
      */
     public ModuloEncomienda() {
         initComponents();
-               
         
     }
 
@@ -225,7 +224,7 @@ public class ModuloEncomienda extends javax.swing.JFrame {
     private void btnDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDespachoActionPerformed
         ModuloPrincipalConsolidado consolidado = new ModuloPrincipalConsolidado();
         consolidado.setVisible(true);
-        this.dispose();
+        // this.dispose();
     }//GEN-LAST:event_btnDespachoActionPerformed
 
     private void btnEncomiendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncomiendaActionPerformed
@@ -241,25 +240,25 @@ public class ModuloEncomienda extends javax.swing.JFrame {
     private void btnAgenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgenciaActionPerformed
         ModuloAgencia agencia = new ModuloAgencia();
         agencia.setVisible(true);
-        this.dispose();
+        // this.dispose();
     }//GEN-LAST:event_btnAgenciaActionPerformed
 
     private void btnVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehiculoActionPerformed
         ModuloVehiculo vehiculo = new ModuloVehiculo();
         vehiculo.setVisible(true);
-        this.dispose();
+        // this.dispose();
     }//GEN-LAST:event_btnVehiculoActionPerformed
 
     private void btnRutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRutaActionPerformed
         ModuloRuta ruta = new ModuloRuta();
         ruta.setVisible(true);
-        this.dispose();
+        // this.dispose();
     }//GEN-LAST:event_btnRutaActionPerformed
 
     private void btnTrabajadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrabajadoresActionPerformed
         ModuloTrabajador trabajador = new ModuloTrabajador();
         trabajador.setVisible(true);
-        this.dispose();
+        // this.dispose();
     }//GEN-LAST:event_btnTrabajadoresActionPerformed
 
     /**

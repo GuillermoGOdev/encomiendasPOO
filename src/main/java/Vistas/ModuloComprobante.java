@@ -15,9 +15,15 @@ import javax.swing.JOptionPane;
 
 
 public class ModuloComprobante extends javax.swing.JFrame {
+    private int idEnco;
     
     public ModuloComprobante() {
         initComponents();
+    }
+    
+    public ModuloComprobante(int id) {
+        initComponents();
+        idEnco = id;
     }
 
     
@@ -59,7 +65,7 @@ public class ModuloComprobante extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         txtImprimir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar Comprobante");
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));

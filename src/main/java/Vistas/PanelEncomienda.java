@@ -1,8 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package Vistas;
+
+import Controladores.ControladorModuloEncomienda;
+import DTO.Encomienda;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -10,11 +12,15 @@ package Vistas;
  */
 public class PanelEncomienda extends javax.swing.JPanel {
 
+    private int idEncomiendaActual = -1;
+    private boolean modoEdicion = false;
+    ControladorModuloEncomienda ctrlModEnco = new ControladorModuloEncomienda();
     /**
      * Creates new form PanelEncomienda
      */
     public PanelEncomienda() {
         initComponents();
+        cargarTablaEncomiendas();
     }
 
     /**
@@ -27,30 +33,30 @@ public class PanelEncomienda extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabEncomiendas = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jdcFecha = new com.toedter.calendar.JDateChooser();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtBuscarCliente = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        btnRegistrar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnPagar = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabEncomiendas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "idEncomienda", "Fecha Envío", "Remitente", "Destinatario", "A. Origen", "A. Destino", "Tipo Paquete", "Flete", "Estado", "Pago"
+                "idEncomienda", "Fecha Envío", "Remitente", "Destinatario", "Flete", "Estado", "Pago"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -61,27 +67,32 @@ public class PanelEncomienda extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(true);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(1);
+        tabEncomiendas.setColumnSelectionAllowed(true);
+        tabEncomiendas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tabEncomiendas);
+        tabEncomiendas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tabEncomiendas.getColumnModel().getColumnCount() > 0) {
+            tabEncomiendas.getColumnModel().getColumn(0).setPreferredWidth(1);
         }
 
         jLabel1.setText("Fecha de registro:");
 
         jLabel2.setText("Cliente:");
 
-        jButton1.setText("Buscar");
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
 
-        jButton2.setText("Registrar");
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);
 
-        jButton3.setText("Editar");
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
 
-        jButton4.setText("Eliminar");
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
-        jButton5.setText("Pagar");
+        btnPagar.setText("Pagar");
+        btnPagar.addActionListener(this::btnPagarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -101,17 +112,17 @@ public class PanelEncomienda extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                        .addComponent(jButton5)
+                        .addComponent(btnPagar)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(btnRegistrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,31 +134,104 @@ public class PanelEncomienda extends javax.swing.JPanel {
                     .addComponent(jLabel2))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                     .addComponent(jdcFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtBuscarCliente, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPagar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
+        int fila = tabEncomiendas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila");
+            return;
+        }
+        
+        //Obtenemos el ID del trabajador
+        int idEncomienda = Integer.parseInt(tabEncomiendas.getValueAt(fila, 0).toString());
+        ModuloComprobante pagar = new ModuloComprobante(idEncomienda);
+        pagar.setVisible(true);
+    }//GEN-LAST:event_btnPagarActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        ModuloRegistrarEncomienda moduloRegistrar = new ModuloRegistrarEncomienda();
+        moduloRegistrar.setVisible(true);
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int fila = tabEncomiendas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila");
+            return;
+        }
+        //Confirmamos antes de eliminar
+        int confirmar = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar esta encomienda?", "Confirmar", JOptionPane.YES_NO_OPTION);
+
+        if (confirmar != JOptionPane.YES_OPTION) {
+            return;
+        }
+        //Obtenemos el ID del trabajador
+        int idEncomienda = Integer.parseInt(tabEncomiendas.getValueAt(fila, 0).toString());
+        boolean eliminado = ctrlModEnco.eliminarEncomienda(idEncomienda);
+
+        if (eliminado) {
+            JOptionPane.showMessageDialog(this, "Encomienda eliminada correctamente");
+            cargarTablaEncomiendas();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al eliminar la encomienda");
+        }
+        cargarTablaEncomiendas();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int fila = tabEncomiendas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila");
+            return;
+        }
+        
+        //Obtenemos el ID del trabajador
+        int idEncomienda = Integer.parseInt(tabEncomiendas.getValueAt(fila, 0).toString());
+        ModuloRegistrarEncomienda moduloRegistrar = new ModuloRegistrarEncomienda(idEncomienda);
+        moduloRegistrar.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        cargarTablaEncomiendas();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void cargarTablaEncomiendas() {
+        String dni = txtBuscarCliente.getText().trim();
+        
+        // Obtener fecha desde el jDateChooser
+        java.sql.Date fechaSQL = null;
+        if (jdcFecha.getDate() != null) {
+            fechaSQL = new java.sql.Date(jdcFecha.getDate().getTime());
+        }
+        
+        tabEncomiendas.setModel(ctrlModEnco.obtenerEncomiendas(dni, fechaSQL));
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnPagar;
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private com.toedter.calendar.JDateChooser jdcFecha;
+    private javax.swing.JTable tabEncomiendas;
+    private javax.swing.JTextField txtBuscarCliente;
     // End of variables declaration//GEN-END:variables
 }

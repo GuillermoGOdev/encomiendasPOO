@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 
 public class EncomiendaDAO implements CRUD<Encomienda>{
@@ -115,23 +116,79 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
         return null;
 
     }
-
+    
     @Override
     public List<Encomienda> listar() {
-        List<Encomienda> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Encomienda";
+        return null;
+    };
+    
+    public DefaultTableModel listarEncomiendas(String dni, java.sql.Date fecha) {
+        String[] titulos = {
+            "idEncomienda", "fechaEnvío", "Remitente", "Destinatario", "Flete", "Estado", "Pago"
+        };
 
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
+        String sql = """
+                     SELECT 
+                     	e.id_encomienda,
+                         e.fecha_envio,
+                         CONCAT(p1.nombres, ' ', p1.apellido_paterno, ' ', p1.apellido_materno) AS Remitente,
+                         CONCAT(p2.nombres, ' ', p2.apellido_paterno, ' ', p2.apellido_materno) AS Destinatario,
+                         e.costo_envio,
+                         e.estado,
+                         e.pago
+                     FROM Encomienda e
+                     INNER JOIN Cliente c1 ON e.id_cliente_remitente = c1.idcliente
+                     INNER JOIN Persona p1 ON c1.idpersona = p1.idpersona
+                     INNER JOIN Cliente c2 ON e.id_cliente_destinatario = c2.idcliente
+                     INNER JOIN Persona p2 ON c2.idpersona = p2.idpersona
+                     WHERE 1 = 1
+                     AND e.estado != 'Anulado'
+                     """;
+        
+        // FILTROS
+        if (dni != null && !dni.trim().isEmpty()) {
+            // 1. Usar AND y encerrar la condición en paréntesis
+            sql += " AND (p1.dni = ? OR p2.dni = ?)";
+        }
+        if (fecha != null) {
+            // 2. Usar el alias correcto 'e' de Encomienda
+            sql += " AND e.fecha_envio = ? ";
+        }
+
+        sql += "ORDER BY 1";
+        
         try (Connection con = ConexionSQL.conectar(); PreparedStatement ps = con.prepareStatement(sql)){
-            ResultSet rs = ps.executeQuery();
+            
+            int index = 1;
 
+            if (dni != null && !dni.trim().isEmpty()) { 
+                ps.setString(index++, dni);
+                ps.setString(index++, dni);
+            }
+
+            if (fecha != null) {
+                ps.setDate(index++, fecha);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            
             while (rs.next()) {
-                lista.add(mapear(rs));
+                modelo.addRow(new Object[]{
+                    rs.getInt("id_encomienda"),
+                    rs.getString("fecha_envio"),
+                    rs.getString("Remitente"),
+                    rs.getString("Destinatario"),
+                    rs.getDouble("costo_envio"),
+                    rs.getString("estado"),
+                    rs.getString("pago")
+                });
             }
 
         } catch (Exception ex) {
             System.out.println("Error listar encomiendas: " + ex.getMessage());
         }
-        return lista;
+        return modelo;
 
     }
     
@@ -148,7 +205,7 @@ public class EncomiendaDAO implements CRUD<Encomienda>{
         }
 
     }
-    
+
     // --- Método para mapear un ResultSet a un objeto Encomienda ---
     private Encomienda mapear(ResultSet rs) throws Exception {
         return new Encomienda(
