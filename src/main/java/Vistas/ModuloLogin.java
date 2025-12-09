@@ -8,7 +8,7 @@ public class ModuloLogin extends javax.swing.JFrame {
 
     public ModuloLogin() {
         initComponents();
-        txtUsuario.setText("Usuario");
+        txtUsuario.setText("Usuario o Correo");
         txtUsuario.setForeground(new java.awt.Color(153,153,153));
         txtContraseña.setText("Contraseña");
         txtContraseña.setEchoChar((char)0);
@@ -149,7 +149,7 @@ public class ModuloLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_txtContraseñaActionPerformed
 
     private void txtUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuarioFocusGained
-        if (txtUsuario.getText().equals("Usuario")) {
+        if (txtUsuario.getText().equals("Usuario o Correo")) {
         txtUsuario.setText("");
         txtUsuario.setForeground(new java.awt.Color(0,0,0)); // Negro al escribir
         }
@@ -197,7 +197,7 @@ public class ModuloLogin extends javax.swing.JFrame {
         
         usuarioLogueado = usuario; //Guardamos al usuario
         JOptionPane.showMessageDialog(this, "Bienvenido: "+usuario.getNombre(),"Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
-        Menu menu = new Menu();
+        ModuloPrincipal menu = new ModuloPrincipal();
         menu.setVisible(true);
         ModuloComprobante mc = new ModuloComprobante();
         mc.setVisible(true);

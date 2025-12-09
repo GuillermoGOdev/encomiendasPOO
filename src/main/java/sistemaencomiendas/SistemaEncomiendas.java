@@ -10,12 +10,5 @@ public class SistemaEncomiendas {
         
         ModuloLogin lg = new ModuloLogin();
         lg.setVisible(true);
-        //HolaMundo
-        //XD PRUEBA LDKJF   LFDHKJ  REDA
-        //Segunda prueba
-        // UNA MÁS POR SI ACASO
-        // comentario prueba
-        // KevinXD
-        //06-12-2025
     }
 }
